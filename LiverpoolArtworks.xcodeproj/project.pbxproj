@@ -14,6 +14,10 @@
 		D370981F274E7C2A00354AE2 /* LiverpoolArtworks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D370981D274E7C2A00354AE2 /* LiverpoolArtworks.xcdatamodeld */; };
 		D3709821274E7C2C00354AE2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3709820274E7C2C00354AE2 /* Assets.xcassets */; };
 		D3709824274E7C2C00354AE2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D3709822274E7C2C00354AE2 /* LaunchScreen.storyboard */; };
+		D370982C274E7CE600354AE2 /* location.png in Resources */ = {isa = PBXBuildFile; fileRef = D370982B274E7CE600354AE2 /* location.png */; };
+		D370982E274E7F4300354AE2 /* artworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D370982D274E7F4300354AE2 /* artworkModel.swift */; };
+		D3709830274E84AC00354AE2 /* UoL campus walk.gpx in Resources */ = {isa = PBXBuildFile; fileRef = D370982F274E84AC00354AE2 /* UoL campus walk.gpx */; };
+		D3709832274E897C00354AE2 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3709831274E897C00354AE2 /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +30,10 @@
 		D3709820274E7C2C00354AE2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D3709823274E7C2C00354AE2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D3709825274E7C2C00354AE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D370982B274E7CE600354AE2 /* location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = location.png; path = ../../../Downloads/location.png; sourceTree = "<group>"; };
+		D370982D274E7F4300354AE2 /* artworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = artworkModel.swift; sourceTree = "<group>"; };
+		D370982F274E84AC00354AE2 /* UoL campus walk.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "UoL campus walk.gpx"; path = "../../../Downloads/UoL campus walk.gpx"; sourceTree = "<group>"; };
+		D3709831274E897C00354AE2 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,11 +69,15 @@
 				D3709814274E7C2A00354AE2 /* AppDelegate.swift */,
 				D3709816274E7C2A00354AE2 /* SceneDelegate.swift */,
 				D3709818274E7C2A00354AE2 /* ViewController.swift */,
+				D3709831274E897C00354AE2 /* DetailViewController.swift */,
+				D370982D274E7F4300354AE2 /* artworkModel.swift */,
 				D370981A274E7C2A00354AE2 /* Main.storyboard */,
-				D3709820274E7C2C00354AE2 /* Assets.xcassets */,
 				D3709822274E7C2C00354AE2 /* LaunchScreen.storyboard */,
+				D3709820274E7C2C00354AE2 /* Assets.xcassets */,
 				D3709825274E7C2C00354AE2 /* Info.plist */,
 				D370981D274E7C2A00354AE2 /* LiverpoolArtworks.xcdatamodeld */,
+				D370982B274E7CE600354AE2 /* location.png */,
+				D370982F274E84AC00354AE2 /* UoL campus walk.gpx */,
 			);
 			path = LiverpoolArtworks;
 			sourceTree = "<group>";
@@ -128,6 +140,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3709830274E84AC00354AE2 /* UoL campus walk.gpx in Resources */,
+				D370982C274E7CE600354AE2 /* location.png in Resources */,
 				D3709824274E7C2C00354AE2 /* LaunchScreen.storyboard in Resources */,
 				D3709821274E7C2C00354AE2 /* Assets.xcassets in Resources */,
 				D370981C274E7C2A00354AE2 /* Main.storyboard in Resources */,
@@ -144,7 +158,9 @@
 				D3709819274E7C2A00354AE2 /* ViewController.swift in Sources */,
 				D3709815274E7C2A00354AE2 /* AppDelegate.swift in Sources */,
 				D3709817274E7C2A00354AE2 /* SceneDelegate.swift in Sources */,
+				D3709832274E897C00354AE2 /* DetailViewController.swift in Sources */,
 				D370981F274E7C2A00354AE2 /* LiverpoolArtworks.xcdatamodeld in Sources */,
+				D370982E274E7F4300354AE2 /* artworkModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
