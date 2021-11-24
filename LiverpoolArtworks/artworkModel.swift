@@ -12,7 +12,7 @@ struct artwork : Decodable {
     let title : String
     let artist : String
     let yearOfWork : String
-    let type : String
+    let type : String?
     let Information : String
     let lat : String
     let long : String
