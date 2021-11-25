@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19206" systemVersion="20G165" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Artwork" representedClassName="Artwork" syncable="YES" codeGenerationType="class">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="20G165" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Artwork" representedClassName="Artwork" syncable="YES">
         <attribute name="artist" optional="YES" attributeType="String"/>
         <attribute name="enabled" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="String"/>
@@ -17,6 +17,6 @@
         <attribute name="yearOfWork" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Artwork" positionX="-63" positionY="-18" width="128" height="239"/>
+        <element name="Artwork" positionX="-63" positionY="-18" width="128" height="253"/>
     </elements>
 </model>

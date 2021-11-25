@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		950657EA274F0FD10097350A /* Artwork+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950657E8274F0FD10097350A /* Artwork+CoreDataClass.swift */; };
+		950657EB274F0FD10097350A /* Artwork+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950657E9274F0FD10097350A /* Artwork+CoreDataProperties.swift */; };
+		950657EF274F16CB0097350A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950657EE274F16CB0097350A /* DetailViewController.swift */; };
+		950657F1274F21850097350A /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950657F0274F21850097350A /* Defaults.swift */; };
 		D3709815274E7C2A00354AE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3709814274E7C2A00354AE2 /* AppDelegate.swift */; };
 		D3709817274E7C2A00354AE2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3709816274E7C2A00354AE2 /* SceneDelegate.swift */; };
 		D3709819274E7C2A00354AE2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3709818274E7C2A00354AE2 /* ViewController.swift */; };
@@ -18,6 +22,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		950657E8274F0FD10097350A /* Artwork+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Artwork+CoreDataClass.swift"; sourceTree = "<group>"; };
+		950657E9274F0FD10097350A /* Artwork+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Artwork+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		950657EE274F16CB0097350A /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		950657F0274F21850097350A /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		D3709811274E7C2A00354AE2 /* LiverpoolArtworks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiverpoolArtworks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3709814274E7C2A00354AE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D3709816274E7C2A00354AE2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -44,6 +52,8 @@
 		D3709808274E7C2A00354AE2 = {
 			isa = PBXGroup;
 			children = (
+				950657E8274F0FD10097350A /* Artwork+CoreDataClass.swift */,
+				950657E9274F0FD10097350A /* Artwork+CoreDataProperties.swift */,
 				D3709813274E7C2A00354AE2 /* LiverpoolArtworks */,
 				D3709812274E7C2A00354AE2 /* Products */,
 			);
@@ -63,6 +73,8 @@
 				D3709814274E7C2A00354AE2 /* AppDelegate.swift */,
 				D3709816274E7C2A00354AE2 /* SceneDelegate.swift */,
 				D3709818274E7C2A00354AE2 /* ViewController.swift */,
+				950657EE274F16CB0097350A /* DetailViewController.swift */,
+				950657F0274F21850097350A /* Defaults.swift */,
 				D370982D274E7F4300354AE2 /* artworkModel.swift */,
 				D370981A274E7C2A00354AE2 /* Main.storyboard */,
 				D3709822274E7C2C00354AE2 /* LaunchScreen.storyboard */,
@@ -144,11 +156,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				950657F1274F21850097350A /* Defaults.swift in Sources */,
 				D3709819274E7C2A00354AE2 /* ViewController.swift in Sources */,
 				D3709815274E7C2A00354AE2 /* AppDelegate.swift in Sources */,
+				950657EA274F0FD10097350A /* Artwork+CoreDataClass.swift in Sources */,
 				D3709817274E7C2A00354AE2 /* SceneDelegate.swift in Sources */,
 				D370981F274E7C2A00354AE2 /* LiverpoolArtworks.xcdatamodeld in Sources */,
+				950657EB274F0FD10097350A /* Artwork+CoreDataProperties.swift in Sources */,
 				D370982E274E7F4300354AE2 /* artworkModel.swift in Sources */,
+				950657EF274F16CB0097350A /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

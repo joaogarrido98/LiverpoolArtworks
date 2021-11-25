@@ -10,7 +10,8 @@ import MapKit
 import CoreData
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate, CLLocationManagerDelegate {
-    var coreArtwork : [NSManagedObject] = []
+    var coreArtwork : [artwork] = []
+    let defaults : Defaults = Defaults()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,38 +22,36 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         do{
             let results = try managedContext.fetch(request)
             if(results.count == 0){
-                getData()
+                getData(hasData: false)
             }else{
+                getData(hasData: true)
             }
         }catch let error {
             print(error)
         }
     }
     
+    //save data to persistent core data
     func saveData(model: artwork){
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
-        guard let entity = NSEntityDescription.entity(forEntityName: "Artwork", in: managedContext) else { return }
-        let artwork = NSManagedObject(entity: entity, insertInto: managedContext)
-        
-        artwork.setValue(model.id, forKey: "id")
-        artwork.setValue(model.title, forKey: "title")
-        artwork.setValue(model.artist, forKey: "artist")
-        artwork.setValue(model.yearOfWork, forKey: "yearOfWork")
-        artwork.setValue(model.type, forKey: "type")
-        artwork.setValue(model.Information, forKey: "information")
-        artwork.setValue(model.lat, forKey: "lat")
-        artwork.setValue(model.long, forKey: "long")
-        artwork.setValue(model.location, forKey: "location")
-        artwork.setValue(model.locationNotes, forKey: "locationNotes")
-        artwork.setValue(model.ImagefileName, forKey: "imagefileName")
-        artwork.setValue(model.thumbnail, forKey: "thumbnail")
-        artwork.setValue(model.lastModified, forKey: "lastModified")
-        artwork.setValue(model.enabled, forKey: "enabled")
-                
+        let toInsert = NSEntityDescription.insertNewObject(forEntityName: "Artwork", into: managedContext) as! Artwork
+        toInsert.artist = model.artist
+        toInsert.title = model.title
+        toInsert.id = model.id
+        toInsert.yearOfWork = model.yearOfWork
+        toInsert.type = model.type
+        toInsert.information = model.Information
+        toInsert.lat = model.lat
+        toInsert.long = model.long
+        toInsert.location = model.location
+        toInsert.locationNotes = model.locationNotes
+        toInsert.imagefileName = model.ImagefileName
+        toInsert.thumbnail = model.thumbnail
+        toInsert.lastModified = model.lastModified
+        toInsert.enabled = model.enabled
         do{
             try managedContext.save()
-            coreArtwork.append(artwork)
         }catch let error as NSError{
             print(error)
         }
@@ -64,6 +63,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "toDetail"){
+            let destination = segue.destination as! DetailViewController
+            let selectedRow = table.indexPathForSelectedRow!.row
+            let data = coreArtwork[selectedRow]
+            destination.titles = data.title
+            destination.information = data.Information
+            destination.artist = data.artist
+            destination.locationNotes = data.locationNotes
+            destination.yearOfWork = data.yearOfWork
+            destination.image = data.ImagefileName
         }
     }
     
@@ -89,8 +97,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return cell
     }
     
-    private func getData(){
-        if let url = URL(string: "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artworksOnCampus/data.php?class=campusart"){
+    //get data from the api
+    private func getData(hasData: Bool){
+        var stringifiedUrl : String
+        //if user doesnt have any date yet retrieve all data from api
+        //else get data since the last date thats stored in the phone
+        if (!hasData){
+            stringifiedUrl = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artworksOnCampus/data.php?class=campusart"
+        }else{
+            let date = defaults.getLastDate()
+            stringifiedUrl = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artworksOnCampus/data.php?class=campusart&lastModified=\(date)"
+        }
+        
+        if let url  = URL(string: stringifiedUrl) {
             let session = URLSession.shared
             session.dataTask(with: url) { (data, response, err) in
                 guard let jsonData = data else{
@@ -100,8 +119,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     let decoder = JSONDecoder()
                     let artworkList : artworks = try decoder.decode(artworks.self, from: jsonData)
                     DispatchQueue.main.async{
+                        //for each element of the data received save to core data
                         for element in artworkList.campusart{
                             self.saveData(model: element)
+                            //save the latest date
+                            self.defaults.saveLastDate()
                         }
                     }
                 } catch let jsonErr {
