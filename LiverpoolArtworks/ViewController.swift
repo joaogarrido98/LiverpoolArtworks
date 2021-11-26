@@ -2,24 +2,66 @@
 //  ViewController.swift
 //  LiverpoolArtworks
 //
-//  Created by Garrido, Joao on 24/11/2021.
+//  Created by Joao Garrido on 24/11/2021.
 //
 
 import UIKit
 import MapKit
 import CoreData
+import CoreLocation
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate, CLLocationManagerDelegate {
+    var locationManager = CLLocationManager()
+    var firstRun = true
+    var startTrackingTheUser = false
     var coreArtwork : [ArtworkModel] = []
     let defaults : Defaults = Defaults()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //initialize location
+        initLocation()
+        
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
         
         //initialize data from core data or api call
         initData(mContext: managedContext)
+    }
+    
+    private func initLocation(){
+        locationManager.delegate = self as CLLocationManagerDelegate
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+        map.showsUserLocation = true
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let locationOfUser = locations[0]
+        let latitude = locationOfUser.coordinate.latitude
+        let longitude = locationOfUser.coordinate.longitude
+        let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        
+        if(firstRun){
+            firstRun = false
+            let latDelta : CLLocationDegrees = 0.0025
+            let lonDelta : CLLocationDegrees = 0.0025
+            let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta)
+            let region = MKCoordinateRegion(center: location, span: span)
+            self.map.setRegion(region, animated: true)
+            
+            _ = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(startUserTracking), userInfo: nil, repeats: false)
+        }
+        
+        if(startTrackingTheUser){
+            map.setCenter(location, animated: true)
+        }
+    }
+    
+    @objc func startUserTracking(){
+        startTrackingTheUser = true
     }
     
     private func initData(mContext : NSManagedObjectContext){
@@ -95,10 +137,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if (!hasData){
             stringifiedUrl = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artworksOnCampus/data.php?class=campusart"
         }else{
+            //get last date where data was modified
             let date = defaults.getLastDate()
             stringifiedUrl = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artworksOnCampus/data.php?class=campusart&lastModified=\(date)"
         }
-        
+        //fetch data from url
         if let url  = URL(string: stringifiedUrl) {
             let session = URLSession.shared
             session.dataTask(with: url) { (data, response, err) in
@@ -106,6 +149,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     return
                 }
                 do{
+                    //transform json data to artwork object
                     let decoder = JSONDecoder()
                     let artworkList : Artworks = try decoder.decode(Artworks.self, from: jsonData)
                     DispatchQueue.main.async{
@@ -128,11 +172,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //performSegue(withIdentifier: "toDetail", sender: self)
     }
     
+    //prepare the segue with the data from core data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "toDetail"){
             let destination = segue.destination as! DetailViewController
             let selectedRow = table.indexPathForSelectedRow!.row
             let data = coreArtwork[selectedRow]
+            //attribute the data to the variables in destination view
             destination.titles = data.title
             destination.information = data.Information
             destination.artist = data.artist
@@ -155,7 +201,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -163,8 +209,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         cell.textLabel?.text = "hello"
         return cell
     }
-    
-    
 
  
     @IBOutlet weak var table: UITableView!

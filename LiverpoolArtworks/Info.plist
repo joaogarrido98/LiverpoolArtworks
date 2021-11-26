@@ -21,5 +21,9 @@
 			</array>
 		</dict>
 	</dict>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Used for ploting your location on the map</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Used for ploting your location on the map</string>
 </dict>
 </plist>

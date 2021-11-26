@@ -11,6 +11,7 @@
 		950657EB274F0FD10097350A /* Artwork+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950657E9274F0FD10097350A /* Artwork+CoreDataProperties.swift */; };
 		950657EF274F16CB0097350A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950657EE274F16CB0097350A /* DetailViewController.swift */; };
 		950657F1274F21850097350A /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950657F0274F21850097350A /* Defaults.swift */; };
+		955536BB2751751000197094 /* UoL campus walk.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 955536BA2751751000197094 /* UoL campus walk.gpx */; };
 		D34A441D27513C6D000D7039 /* default.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D34A441C27513C6D000D7039 /* default.jpeg */; };
 		D3709815274E7C2A00354AE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3709814274E7C2A00354AE2 /* AppDelegate.swift */; };
 		D3709817274E7C2A00354AE2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3709816274E7C2A00354AE2 /* SceneDelegate.swift */; };
@@ -27,6 +28,7 @@
 		950657E9274F0FD10097350A /* Artwork+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Artwork+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		950657EE274F16CB0097350A /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		950657F0274F21850097350A /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
+		955536BA2751751000197094 /* UoL campus walk.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "UoL campus walk.gpx"; sourceTree = "<group>"; };
 		D34A441C27513C6D000D7039 /* default.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default.jpeg; sourceTree = "<group>"; };
 		D3709811274E7C2A00354AE2 /* LiverpoolArtworks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiverpoolArtworks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3709814274E7C2A00354AE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -51,12 +53,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D34A441927511ED7000D7039 /* images */ = {
+		D34A441927511ED7000D7039 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				955536BA2751751000197094 /* UoL campus walk.gpx */,
 				D34A441C27513C6D000D7039 /* default.jpeg */,
 			);
-			path = images;
+			path = resources;
 			sourceTree = "<group>";
 		};
 		D3709808274E7C2A00354AE2 = {
@@ -80,7 +83,7 @@
 		D3709813274E7C2A00354AE2 /* LiverpoolArtworks */ = {
 			isa = PBXGroup;
 			children = (
-				D34A441927511ED7000D7039 /* images */,
+				D34A441927511ED7000D7039 /* resources */,
 				D3709814274E7C2A00354AE2 /* AppDelegate.swift */,
 				D3709816274E7C2A00354AE2 /* SceneDelegate.swift */,
 				D3709818274E7C2A00354AE2 /* ViewController.swift */,
@@ -154,6 +157,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				955536BB2751751000197094 /* UoL campus walk.gpx in Resources */,
 				D3709824274E7C2C00354AE2 /* LaunchScreen.storyboard in Resources */,
 				D34A441D27513C6D000D7039 /* default.jpeg in Resources */,
 				D3709821274E7C2C00354AE2 /* Assets.xcassets in Resources */,

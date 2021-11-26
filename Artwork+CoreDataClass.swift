@@ -2,7 +2,7 @@
 //  Artwork+CoreDataClass.swift
 //  LiverpoolArtworks
 //
-//  Created by Ilkin Samedzade on 25/11/2021.
+//  Created by Joao Garrido on 25/11/2021.
 //
 //
 
