@@ -86,25 +86,29 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9oO-Xq-jOX">
-                                <rect key="frame" x="0.0" y="100" width="414" height="465"/>
+                            <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9oO-Xq-jOX">
+                                <rect key="frame" x="0.0" y="100" width="414" height="468"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="oCi-ag-Gpu" appends="YES" id="bHP-SP-Ss2"/>
+                                </connections>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qdF-JK-Led">
-                                <rect key="frame" x="20" y="573" width="374" height="21"/>
+                                <rect key="frame" x="20" y="576" width="374" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="78f-iV-Hhf"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Made in " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GZ1-yG-330">
-                                <rect key="frame" x="20" y="602" width="374" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <rect key="frame" x="20" y="605" width="374" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" systemColor="secondaryLabelColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Description of the artwork" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="fVL-X5-aXY">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Description of the artwork" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="fVL-X5-aXY">
                                 <rect key="frame" x="20" y="631" width="374" height="177"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
@@ -117,6 +121,7 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="23P-av-UTz"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="qdF-JK-Led" firstAttribute="top" secondItem="9oO-Xq-jOX" secondAttribute="bottom" constant="8" symbolic="YES" id="0D9-O4-ZRU"/>
                             <constraint firstItem="6t3-cN-KTZ" firstAttribute="top" secondItem="ufE-L7-IVP" secondAttribute="bottom" constant="20" id="2vu-JC-EZr"/>
@@ -140,8 +145,21 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="fC4-Vi-Df3"/>
+                    <connections>
+                        <outlet property="artistLabel" destination="6t3-cN-KTZ" id="93n-vJ-nYG"/>
+                        <outlet property="imageLabel" destination="9oO-Xq-jOX" id="64x-bQ-kb5"/>
+                        <outlet property="locationLabel" destination="ufE-L7-IVP" id="lNJ-lr-agd"/>
+                        <outlet property="madeLabel" destination="GZ1-yG-330" id="cAf-2M-Vf9"/>
+                        <outlet property="textLabel" destination="fVL-X5-aXY" id="HRI-sL-R6F"/>
+                        <outlet property="titleLabel" destination="qdF-JK-Led" id="gIW-Yu-JRm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TnS-DA-Olo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="oCi-ag-Gpu">
+                    <connections>
+                        <action selector="imagedTapped:" destination="Ond-n3-GGL" id="r46-aP-yle"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1079.7101449275362" y="85.714285714285708"/>
         </scene>
@@ -149,6 +167,9 @@
     <resources>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
