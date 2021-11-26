@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct artwork : Decodable {
+//Model for the data that comes from the api 
+struct ArtworkModel : Decodable {
     let id : String
     let title : String
     let artist : String
@@ -24,7 +25,7 @@ struct artwork : Decodable {
     let enabled : String
 }
 
-struct artworks : Decodable {
-    let campusart : [artwork]
+struct Artworks : Decodable {
+    let campusart : [ArtworkModel]
 }
 

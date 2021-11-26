@@ -49,6 +49,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D34A441927511ED7000D7039 /* images */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
 		D3709808274E7C2A00354AE2 = {
 			isa = PBXGroup;
 			children = (
@@ -70,6 +77,7 @@
 		D3709813274E7C2A00354AE2 /* LiverpoolArtworks */ = {
 			isa = PBXGroup;
 			children = (
+				D34A441927511ED7000D7039 /* images */,
 				D3709814274E7C2A00354AE2 /* AppDelegate.swift */,
 				D3709816274E7C2A00354AE2 /* SceneDelegate.swift */,
 				D3709818274E7C2A00354AE2 /* ViewController.swift */,
