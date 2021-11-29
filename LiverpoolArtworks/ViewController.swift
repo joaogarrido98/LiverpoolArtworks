@@ -13,8 +13,6 @@ import CoreLocation
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate, CLLocationManagerDelegate {
     var locationManager = CLLocationManager()
     let defaults : Defaults = Defaults()
-    var firstRun = true
-    var startTrackingTheUser = false
     var coreArtwork : [ArtworkModel] = []
     var locationNames : Array<String> = []
     var allLocations : [String : Locations] = [:]
@@ -42,30 +40,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let locationOfUser = locations[0]
-        let latitude = locationOfUser.coordinate.latitude
-        let longitude = locationOfUser.coordinate.longitude
-        let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        
-        if(firstRun){
-            firstRun = false
-            let latDelta : CLLocationDegrees = 0.002
-            let lonDelta : CLLocationDegrees = 0.002
-            let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta)
-            let region = MKCoordinateRegion(center: location, span: span)
+        if let location = locations.last{
+            let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.0018, longitudeDelta: 0.0018))
             self.map.setRegion(region, animated: true)
-            
-            _ = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(startUserTracking), userInfo: nil, repeats: false)
-        }
-        
-        if(startTrackingTheUser){
-            map.setCenter(location, animated: true)
         }
     }
     
-    @objc func startUserTracking(){
-        startTrackingTheUser = true
-    }
     
     private func initData(mContext : NSManagedObjectContext){
         //fetch data from core data
