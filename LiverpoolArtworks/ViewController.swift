@@ -49,8 +49,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         if(firstRun){
             firstRun = false
-            let latDelta : CLLocationDegrees = 0.0025
-            let lonDelta : CLLocationDegrees = 0.0025
+            let latDelta : CLLocationDegrees = 0.002
+            let lonDelta : CLLocationDegrees = 0.002
             let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta)
             let region = MKCoordinateRegion(center: location, span: span)
             self.map.setRegion(region, animated: true)
@@ -179,12 +179,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    //get all possible locations
     private func getAllLocations(){
+        //create a list with all names of the locations
         for element in coreArtwork{
             if(!locationNames.contains(element.locationNotes)){
                 locationNames.append(element.locationNotes)
             }
         }
+        //create a dictionary with the name and its coordinates
         for location in locationNames {
             for element in coreArtwork{
                 if(location == element.locationNotes){
@@ -196,6 +199,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    //create a dictionary with all the data for each location
     private func setDataDictionary(){
         dataDictionary = [:]
         var art = [ArtworkModel]()
@@ -209,13 +213,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    //create the annotations on the map
     private func setAnnotations(){
+        //put an annotation for each location
         for location in allLocations {
             guard let name = location.value.name else {return}
             guard let lat = location.value.lat else {return}
             guard let lon = location.value.lon else {return}
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
             annotation.title = name

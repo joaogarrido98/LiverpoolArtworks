@@ -21,19 +21,29 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         getImage()
-        locationLabel.text = locationNotes
+        
+        //if values are not empty put it on the UI
+        if(locationNotes != nil) {
+            locationLabel.text = locationNotes
+        }
         if(artist != ""){
             artistLabel.text = "By " + artist!
         }
         if(yearOfWork != ""){
             madeLabel.text = "Made in " + yearOfWork!
         }
-        textLabel.text = information
-        titleLabel.text = titles
+        if(information != nil){
+            textLabel.text = information
+        }
+        if(titles != nil){
+            titleLabel.text = titles
+        }
     }
     
+    //qpi call to images url and get the image from the server
     private func getImage(){
         if(image != ""){
+            //remove spaces from url and put %20 instead
             let transformedString = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artwork_images/" + (image?.replacingOccurrences(of: " ", with: "%20"))!
             if(transformedString != ""){
                 if let url = URL(string: transformedString ){
@@ -43,6 +53,7 @@ class DetailViewController: UIViewController {
                             return
                         }
                         do {
+                            //put imqge in the image view
                             DispatchQueue.main.async { [self] in
                                 downloadedImage = UIImage(data: imageData)
                                 imageLabel.image = downloadedImage
@@ -52,6 +63,7 @@ class DetailViewController: UIViewController {
                 }
             }
         }else{
+            //if image is empty put a default image
             imageLabel.image = UIImage(imageLiteralResourceName: "default")
         }
     }
