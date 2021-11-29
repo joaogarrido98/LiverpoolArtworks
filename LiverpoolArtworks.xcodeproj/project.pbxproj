@@ -21,6 +21,7 @@
 		D3709821274E7C2C00354AE2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3709820274E7C2C00354AE2 /* Assets.xcassets */; };
 		D3709824274E7C2C00354AE2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D3709822274E7C2C00354AE2 /* LaunchScreen.storyboard */; };
 		D370982E274E7F4300354AE2 /* artworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D370982D274E7F4300354AE2 /* artworkModel.swift */; };
+		D38E4F6A27552B8500BF3FAD /* Locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E4F6927552B8500BF3FAD /* Locations.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		D3709823274E7C2C00354AE2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D3709825274E7C2C00354AE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D370982D274E7F4300354AE2 /* artworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = artworkModel.swift; sourceTree = "<group>"; };
+		D38E4F6927552B8500BF3FAD /* Locations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locations.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 				D3709814274E7C2A00354AE2 /* AppDelegate.swift */,
 				D3709816274E7C2A00354AE2 /* SceneDelegate.swift */,
 				D3709818274E7C2A00354AE2 /* ViewController.swift */,
+				D38E4F6927552B8500BF3FAD /* Locations.swift */,
 				950657EE274F16CB0097350A /* DetailViewController.swift */,
 				950657F0274F21850097350A /* Defaults.swift */,
 				D370982D274E7F4300354AE2 /* artworkModel.swift */,
@@ -180,6 +183,7 @@
 				D370981F274E7C2A00354AE2 /* LiverpoolArtworks.xcdatamodeld in Sources */,
 				950657EB274F0FD10097350A /* Artwork+CoreDataProperties.swift in Sources */,
 				D370982E274E7F4300354AE2 /* artworkModel.swift in Sources */,
+				D38E4F6A27552B8500BF3FAD /* Locations.swift in Sources */,
 				950657EF274F16CB0097350A /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,6 +335,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LiverpoolArtworks/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Used for ploting your location on the map";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Used for ploting your location on the map";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -358,6 +364,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LiverpoolArtworks/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Used for ploting your location on the map";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Used for ploting your location on the map";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

@@ -8,7 +8,7 @@
 import Foundation
 
 //Model for the data that comes from the api 
-struct ArtworkModel : Decodable {
+struct ArtworkModel : Decodable{
     let id : String
     let title : String
     let artist : String

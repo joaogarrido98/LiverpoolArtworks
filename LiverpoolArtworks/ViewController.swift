@@ -12,10 +12,13 @@ import CoreLocation
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate, CLLocationManagerDelegate {
     var locationManager = CLLocationManager()
+    let defaults : Defaults = Defaults()
     var firstRun = true
     var startTrackingTheUser = false
     var coreArtwork : [ArtworkModel] = []
-    let defaults : Defaults = Defaults()
+    var locationNames : Array<String> = []
+    var allLocations : [String : Locations] = [:]
+    var dataDictionary : [String : [ArtworkModel]] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,10 +94,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         thumbnail: elem.thumbnail ?? "",
                         lastModified: elem.lastModified ?? "",
                         enabled: elem.enabled ?? "")
-                    coreArtwork.append(art)
+                    self.coreArtwork.append(art)
                 }
+                self.getAllLocations()
+                self.setDataDictionary()
+                self.setAnnotations()
+                self.table.reloadData()
                 //get data since the last time it was updated
-                getData(hasData: true)
+                self.getData(hasData: true)
             }
         }catch let error {
             print(error)
@@ -160,6 +167,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                             self.defaults.saveLastDate()
                             self.coreArtwork.append(element)
                         }
+                        self.getAllLocations()
+                        self.setDataDictionary()
+                        self.setAnnotations()
+                        self.table.reloadData()
                     }
                 } catch let jsonErr {
                     print("Error decoding json", jsonErr)
@@ -168,8 +179,48 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //performSegue(withIdentifier: "toDetail", sender: self)
+    private func getAllLocations(){
+        for element in coreArtwork{
+            if(!locationNames.contains(element.locationNotes)){
+                locationNames.append(element.locationNotes)
+            }
+        }
+        for location in locationNames {
+            for element in coreArtwork{
+                if(location == element.locationNotes){
+                    let lat = Double(element.lat)
+                    let lon = Double(element.long)
+                    allLocations[location] = Locations(name: element.locationNotes, lat: lat, lon: lon)
+                }
+            }
+        }
+    }
+    
+    private func setDataDictionary(){
+        dataDictionary = [:]
+        var art = [ArtworkModel]()
+        for location in locationNames {
+                for element in coreArtwork {
+                    if(location == element.locationNotes){
+                        art.append(element)
+                    }
+                }
+            dataDictionary[location] = art
+        }
+    }
+    
+    private func setAnnotations(){
+        for location in allLocations {
+            guard let name = location.value.name else {return}
+            guard let lat = location.value.lat else {return}
+            guard let lon = location.value.lon else {return}
+            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            annotation.title = name
+            self.map.addAnnotation(annotation)
+        }
     }
     
     //prepare the segue with the data from core data
@@ -189,19 +240,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return locationNames.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if(section == 2){
-            return "fuck"
-        }else{
-            return "me"
-        }
+        return locationNames[section]
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+       return 5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
