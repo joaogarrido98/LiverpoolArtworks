@@ -29,11 +29,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(data)
         for art in data!{
             getImage(path: art.thumbnail)
         }
-        print(data)
     }
     
     

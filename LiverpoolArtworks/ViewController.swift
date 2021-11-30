@@ -11,6 +11,7 @@ import CoreData
 import CoreLocation
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate, CLLocationManagerDelegate {
+    
     // MARK: - Class Variables
     var locationManager = CLLocationManager()
     let defaults : Defaults = Defaults()
@@ -19,13 +20,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var allLocations : [String : Locations] = [:]
     var dataDictionary : [String : [ArtworkModel]] = [:]
     var chosen : [ArtworkModel]? = []
+    var selected : Int = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
         //initialize location
         initLocation()
         
@@ -38,6 +36,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
     // MARK: - Map setup
+    
     private func initLocation(){
         locationManager.delegate = self as CLLocationManagerDelegate
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
@@ -57,9 +56,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     //gets annotation clicked title and performs segue to list controller
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        mapView.deselectAnnotation(view.annotation, animated: true)
+        //if is the user annotation do nothing
+        if (view.annotation as? MKUserLocation) != nil{
+            return
+        }
+        //if location has more than 1 artwork than show list of artworks
+        //else go straight to the detail about that artwork
         if((view.annotation?.title) != nil){
             chosen = dataDictionary[(view.annotation?.title)! ?? ""]
-            performSegue(withIdentifier: "toList", sender: self)
+            if(chosen!.count > 1){
+                performSegue(withIdentifier: "toList", sender: self)
+            }else if(chosen!.count > 0){
+                performSegue(withIdentifier: "toDetailFromAnnotation", sender: self)
+            }
         }
     }
     
@@ -110,9 +120,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         enabled: elem.enabled ?? "")
                     self.coreArtwork.append(art)
                 }
-                self.getAllLocations()
-                self.setDataDictionary()
+                self.getAllBuildings()
                 self.setAnnotations()
+                self.setDataDictionary()
                 self.table.reloadData()
                 //get data since the last time it was updated
                 self.getData(hasData: true)
@@ -181,9 +191,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                             self.defaults.saveLastDate()
                             self.coreArtwork.append(element)
                         }
-                        self.getAllLocations()
-                        self.setDataDictionary()
+                        self.getAllBuildings()
                         self.setAnnotations()
+                        self.setDataDictionary()
                         self.table.reloadData()
                     }
                 } catch let jsonErr {
@@ -193,21 +203,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    //get all possible locations
-    private func getAllLocations(){
+    //get all possible buildings and its coordinates
+    private func getAllBuildings(){
         //create a list with all names of the locations
         for element in coreArtwork{
-            if(!locationNames.contains(element.locationNotes)){
-                locationNames.append(element.locationNotes)
+            if(!locationNames.contains(element.location)){
+                locationNames.append(element.location)
             }
         }
         //create a dictionary with the name and its coordinates
         for location in locationNames {
             for element in coreArtwork{
-                if(location == element.locationNotes){
+                if(location == element.location){
                     let lat = Double(element.lat)
                     let lon = Double(element.long)
-                    allLocations[location] = Locations(name: element.locationNotes, lat: lat, lon: lon)
+                    allLocations[location] = Locations(name: element.location, lat: lat, lon: lon)
                 }
             }
         }
@@ -216,10 +226,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //create a dictionary with all the data for each location
     private func setDataDictionary(){
         dataDictionary = [:]
-        var art = [ArtworkModel]()
+        var art : [ArtworkModel] = []
         for location in locationNames {
+            art = []
                 for element in coreArtwork {
-                    if(location == element.locationNotes){
+                    if(location == element.location){
                         art.append(element)
                     }
                 }
@@ -233,20 +244,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "toDetail"){
             let destination = segue.destination as! DetailViewController
-            let selectedRow = table.indexPathForSelectedRow!.row
-            let data = coreArtwork[selectedRow]
             //attribute the data to the variable in destination view
-            destination.artwork = data
+            destination.artwork = coreArtwork[selected]
         }
         if(segue.identifier == "toList"){
             let destination = segue.destination as! ListViewController
             destination.data = chosen
+        }
+        if(segue.identifier == "toDetailFromAnnotation"){
+            let destination = segue.destination as! DetailViewController
+            destination.artwork = chosen![0]
         }
     }
     
     @IBAction func unwind( _ seg: UIStoryboardSegue) {}
     
     // MARK: - Table setup
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selected = indexPath.row
+        performSegue(withIdentifier: "toDetail", sender: self)
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return locationNames.count

@@ -56,9 +56,6 @@
                                                 </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="Ond-n3-GGL" kind="presentation" identifier="toDetail" modalPresentationStyle="fullScreen" id="3q7-qZ-Emz"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -83,6 +80,8 @@
                         <outlet property="map" destination="TMZ-JT-WUR" id="WRe-al-6w5"/>
                         <outlet property="table" destination="6yF-Lw-WEk" id="BSI-nf-tds"/>
                         <segue destination="WVi-ey-x7b" kind="show" identifier="toList" id="nW4-pP-0F2"/>
+                        <segue destination="Ond-n3-GGL" kind="presentation" identifier="toDetail" modalPresentationStyle="fullScreen" id="L69-39-QKc"/>
+                        <segue destination="Ond-n3-GGL" kind="presentation" identifier="toDetailFromAnnotation" modalPresentationStyle="fullScreen" id="4wB-fO-b1p"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -263,7 +262,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="PN5-ZH-6Qi"/>
+        <segue reference="4wB-fO-b1p"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="default" width="620" height="600"/>
