@@ -9,34 +9,33 @@ import UIKit
 
 class DetailViewController: UIViewController {
     //data gotten from
-    var titles : String?
-    var artist : String?
+    var artwork : ArtworkModel?
     var image : String?
-    var yearOfWork : String?
-    var information : String?
-    var locationNotes : String?
     var downloadedImage : UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if(artwork?.ImagefileName != ""){
+            image = artwork?.ImagefileName
+        }
         getImage()
         
         //if values are not empty put it on the UI
-        if(locationNotes != nil) {
-            locationLabel.text = locationNotes
+        if(artwork?.locationNotes != nil) {
+            locationLabel.text = artwork?.locationNotes
         }
-        if(artist != ""){
-            artistLabel.text = "By " + artist!
+        if(artwork?.artist != ""){
+            artistLabel.text = "By " + artwork!.artist
         }
-        if(yearOfWork != ""){
-            madeLabel.text = "Made in " + yearOfWork!
+        if(artwork?.yearOfWork != ""){
+            madeLabel.text = "Made in " + artwork!.yearOfWork
         }
-        if(information != nil){
-            textLabel.text = information
+        if(artwork?.Information != ""){
+            textLabel.text = artwork!.Information
         }
-        if(titles != nil){
-            titleLabel.text = titles
+        if(artwork?.title != ""){
+            titleLabel.text = artwork!.title
         }
     }
     

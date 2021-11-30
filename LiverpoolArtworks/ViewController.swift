@@ -11,16 +11,21 @@ import CoreData
 import CoreLocation
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate, CLLocationManagerDelegate {
+    // MARK: - Class Variables
     var locationManager = CLLocationManager()
     let defaults : Defaults = Defaults()
     var coreArtwork : [ArtworkModel] = []
     var locationNames : Array<String> = []
     var allLocations : [String : Locations] = [:]
     var dataDictionary : [String : [ArtworkModel]] = [:]
+    var chosen : [ArtworkModel]? = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
         //initialize location
         initLocation()
         
@@ -31,6 +36,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         initData(mContext: managedContext)
     }
     
+    
+    // MARK: - Map setup
     private func initLocation(){
         locationManager.delegate = self as CLLocationManagerDelegate
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
@@ -39,6 +46,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         map.showsUserLocation = true
     }
     
+    //get the user location and put it on the map, keeps track of location
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last{
             let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
@@ -47,6 +55,31 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    //gets annotation clicked title and performs segue to list controller
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if((view.annotation?.title) != nil){
+            chosen = dataDictionary[(view.annotation?.title)! ?? ""]
+            performSegue(withIdentifier: "toList", sender: self)
+        }
+    }
+    
+    //create the annotations on the map
+    private func setAnnotations(){
+        //put an annotation for each location
+        for location in allLocations {
+            guard let name = location.value.name else {return}
+            guard let lat = location.value.lat else {return}
+            guard let lon = location.value.lon else {return}
+            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            annotation.title = name
+            self.map.addAnnotation(annotation)
+        }
+    }
+    
+    
+    // MARK: - Data setup
     
     private func initData(mContext : NSManagedObjectContext){
         //fetch data from core data
@@ -193,37 +226,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             dataDictionary[location] = art
         }
     }
-    
-    //create the annotations on the map
-    private func setAnnotations(){
-        //put an annotation for each location
-        for location in allLocations {
-            guard let name = location.value.name else {return}
-            guard let lat = location.value.lat else {return}
-            guard let lon = location.value.lon else {return}
-            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinate
-            annotation.title = name
-            self.map.addAnnotation(annotation)
-        }
-    }
-    
+
+    // MARK: - Segue
+
     //prepare the segue with the data from core data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "toDetail"){
             let destination = segue.destination as! DetailViewController
             let selectedRow = table.indexPathForSelectedRow!.row
             let data = coreArtwork[selectedRow]
-            //attribute the data to the variables in destination view
-            destination.titles = data.title
-            destination.information = data.Information
-            destination.artist = data.artist
-            destination.locationNotes = data.locationNotes
-            destination.yearOfWork = data.yearOfWork
-            destination.image = data.ImagefileName
+            //attribute the data to the variable in destination view
+            destination.artwork = data
+        }
+        if(segue.identifier == "toList"){
+            let destination = segue.destination as! ListViewController
+            destination.data = chosen
         }
     }
+    
+    @IBAction func unwind( _ seg: UIStoryboardSegue) {}
+    
+    // MARK: - Table setup
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return locationNames.count
@@ -247,4 +270,3 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var map: MKMapView!
 }
-
