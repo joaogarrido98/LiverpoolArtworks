@@ -8,76 +8,79 @@
 import UIKit
 
 class DetailViewController: UIViewController {
-    //data gotten from
+    //data gotten from the segue
     var artwork : ArtworkModel?
-    var image : String?
+    //class variables
     var downloadedImage : UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if(artwork?.ImagefileName != ""){
-            image = artwork?.ImagefileName
-        }
-        getImage()
-        
         //if values are not empty put it on the UI
         if(artwork?.locationNotes != nil) {
-            locationLabel.text = artwork?.locationNotes
+            locationLabel.text = artwork!.locationNotes
         }
-        if(artwork?.artist != ""){
+        
+        if(artwork?.artist != nil){
             artistLabel.text = "By " + artwork!.artist
         }
-        if(artwork?.yearOfWork != ""){
+        
+        if(artwork?.yearOfWork != nil){
             madeLabel.text = "Made in " + artwork!.yearOfWork
         }
-        if(artwork?.Information != ""){
+        
+        if(artwork?.Information != nil){
             textLabel.text = artwork!.Information
         }
-        if(artwork?.title != ""){
+        
+        if(artwork?.title != nil){
             titleLabel.text = artwork!.title
         }
-    }
-    
-    //qpi call to images url and get the image from the server
-    private func getImage(){
-        if(image != ""){
-            //remove spaces from url and put %20 instead
-            let transformedString = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artwork_images/" + (image?.replacingOccurrences(of: " ", with: "%20"))!
-            if(transformedString != ""){
-                if let url = URL(string: transformedString ){
-                    let session = URLSession.shared
-                    session.dataTask(with: url) { (data,response,err) in
-                        guard let imageData = data else {
-                            return
-                        }
-                        do {
-                            //put imqge in the image view
-                            DispatchQueue.main.async { [self] in
-                                downloadedImage = UIImage(data: imageData)
-                                imageLabel.image = downloadedImage
-                            }
-                        }
-                    }.resume()
-                }
-            }
+        
+        if(artwork?.ImagefileName != nil){
+            getImage(image: artwork!.ImagefileName)
         }else{
             //if image is empty put a default image
             imageLabel.image = UIImage(imageLiteralResourceName: "default")
         }
     }
     
-    @IBAction func imagedTapped(_ sender: Any) {
-            let newImageView = UIImageView(image: downloadedImage)
-            newImageView.frame = UIScreen.main.bounds
-            newImageView.backgroundColor = .black
-            newImageView.contentMode = .scaleAspectFit
-            newImageView.isUserInteractionEnabled = true
-            let tap = UITapGestureRecognizer(target: self, action: #selector(dismissFullscreenImage))
-            newImageView.addGestureRecognizer(tap)
-            self.view.addSubview(newImageView)
+    //api call to images url and get the image from the server
+    private func getImage(image: String){
+        //remove spaces from url and put %20 instead
+        let transformedString = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artwork_images/" + (image.replacingOccurrences(of: " ", with: "%20"))
+        if(transformedString != ""){
+            if let url = URL(string: transformedString ){
+                let session = URLSession.shared
+                session.dataTask(with: url) { (data,response,err) in
+                    guard let imageData = data else { return }
+                    do {
+                        //put image in the image view
+                        DispatchQueue.main.async { [self] in
+                            downloadedImage = UIImage(data: imageData)
+                            imageLabel.image = downloadedImage
+                        }
+                    }
+                }.resume()
+            }
+        }
     }
     
+    //on image tap a new view appears with image on full size
+    @IBAction func imagedTapped(_ sender: Any) {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissFullscreenImage))
+        let largeView = UIImageView(image: downloadedImage)
+        largeView.frame = UIScreen.main.bounds
+        largeView.backgroundColor = .black
+        largeView.contentMode = .scaleAspectFit
+        largeView.isUserInteractionEnabled = true
+        largeView.addGestureRecognizer(tap)
+        //animation for showing image
+        UIView.transition(with: self.view, duration: 0.25, options: [.transitionCrossDissolve], animations: {
+            self.view.addSubview(largeView) }, completion: nil)
+    }
+    
+    //dismiss the view created previous
     @objc func dismissFullscreenImage(_ sender: UITapGestureRecognizer) {
         sender.view?.removeFromSuperview()
     }

@@ -2,7 +2,7 @@
 //  ListViewController.swift
 //  LiverpoolArtworks
 //
-//  Created by Ilkin Samedzade on 30/11/2021.
+//  Created by Joao Garrido on 30/11/2021.
 //
 
 import UIKit
@@ -29,13 +29,13 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(data)
         for art in data!{
             getImage(path: art.thumbnail)
         }
     }
     
-    
+    //download image from the api
+    //put it on the array so it can be used in the table
     private func getImage(path: String) {
         if let url = URL(string: path){
             let session = URLSession.shared
@@ -52,6 +52,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    //send data to the detail page
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "toDetailFromList"){
             let destination = segue.destination as! DetailViewController
