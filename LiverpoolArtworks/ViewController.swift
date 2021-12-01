@@ -13,8 +13,9 @@ import CoreLocation
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate, CLLocationManagerDelegate {
     
     // MARK: - Class Variables
-    var locationManager = CLLocationManager()
+    //Class variables
     let defaults : Defaults = Defaults()
+    var locationManager = CLLocationManager()
     var coreArtwork : [ArtworkModel] = []
     var locationNames : Array<String> = []
     var allLocations : [String : Locations] = [:]
@@ -27,10 +28,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //initialize location
         initLocation()
         
+        //initialize data from core data or api call
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
-        
-        //initialize data from core data or api call
         initData(mContext: managedContext)
     }
     
@@ -58,9 +58,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         mapView.deselectAnnotation(view.annotation, animated: true)
         //if is the user annotation do nothing
-        if (view.annotation as? MKUserLocation) != nil{
-            return
-        }
+        if (view.annotation as? MKUserLocation) != nil{ return }
         //if location has more than 1 artwork than show list of artworks
         //else go straight to the detail about that artwork
         if((view.annotation?.title) != nil){
@@ -98,7 +96,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         do{
             //if data is empty get all data from api call
             let results = try mContext.fetch(request) as? [Artwork]
-            if(results == nil){
+            if((results?.isEmpty) != nil){
                 getData(hasData: false)
             }else{
                 //if data is not empty get the data from core data and transform it to the data model
@@ -229,10 +227,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         for location in locationNames {
             var art : [ArtworkModel] = []
                 for element in coreArtwork {
+                    //if location is the same append artwork to artwork array
                     if(location == element.location){
                         art.append(element)
                     }
                 }
+            //put art array to the specific location array
             dataDictionary[location] = art
         }
     }
@@ -252,10 +252,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         if(segue.identifier == "toDetailFromAnnotation"){
             let destination = segue.destination as! DetailViewController
-            destination.artwork = chosen![0]
+            if(chosen!.count > 0){
+                destination.artwork = chosen![0]
+            }
         }
     }
     
+    //go back to this view on back button
     @IBAction func unwind( _ seg: UIStoryboardSegue) {}
     
     // MARK: - Table setup
