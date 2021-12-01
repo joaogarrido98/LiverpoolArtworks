@@ -226,9 +226,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //create a dictionary with all the data for each location
     private func setDataDictionary(){
         dataDictionary = [:]
-        var art : [ArtworkModel] = []
         for location in locationNames {
-            art = []
+            var art : [ArtworkModel] = []
                 for element in coreArtwork {
                     if(location == element.location){
                         art.append(element)

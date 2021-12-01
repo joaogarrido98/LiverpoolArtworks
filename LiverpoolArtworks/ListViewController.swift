@@ -8,11 +8,13 @@
 import UIKit
 
 class ListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+    //data received from
     var data : [ArtworkModel]?
+    //class variables to store the images
     var images : Array<Any>? = []
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data!.count
+        return data?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -20,8 +22,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.textLabel?.text = data?[indexPath.row].title
         cell.detailTextLabel?.text = data?[indexPath.row].artist
         if(data?[indexPath.row].thumbnail != nil){
-            if(images!.indices.contains(indexPath.row)){
-                cell.imageView?.image = UIImage(data: images![indexPath.row] as! Data)
+            if(images != nil){
+                if(images!.indices.contains(indexPath.row)){
+                    cell.imageView?.image = UIImage(data: images![indexPath.row] as! Data)
+                }
             }
         }
         return cell
@@ -29,8 +33,11 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        for art in data!{
-            getImage(path: art.thumbnail)
+        //get the image frol the api for each artwork
+        if(data != nil){
+            for art in data!{
+                getImage(path: art.thumbnail)
+            }
         }
     }
     
@@ -57,9 +64,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         if(segue.identifier == "toDetailFromList"){
             let destination = segue.destination as! DetailViewController
             let selectedRow = table.indexPathForSelectedRow!.row
-            let data = data?[selectedRow]
-            //attribute the data to the variable in destination view
-            destination.artwork = data
+            if let data = data?[selectedRow] {
+                //attribute the data to the variable in destination view
+                destination.artwork = data
+            }
         }
     }
 
