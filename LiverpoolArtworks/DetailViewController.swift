@@ -16,7 +16,7 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //if values are not empty put it on the UI
+        //if values are not nil put it on the UI
         if(artwork?.locationNotes != nil) {
             locationLabel.text = artwork!.locationNotes
         }
