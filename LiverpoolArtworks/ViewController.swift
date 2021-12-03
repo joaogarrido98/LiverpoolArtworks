@@ -32,11 +32,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
         initData(mContext: managedContext)
+        
+       /* let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Artwork")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+        do {
+            try managedContext.execute(deleteRequest)
+        } catch let error as NSError {
+            // TODO: handle the error
+        }*/
     }
     
     
     // MARK: - Data setup
-    
     private func initData(mContext : NSManagedObjectContext){
         //fetch data from core data
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Artwork")
@@ -105,17 +113,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //get data from the api
     private func getData(hasData: Bool){
         var stringifiedUrl : String
-        //get last date where data was modified
-        let lastDate = defaults.getLastDate()
-        let date = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
         //if user doesnt have any data yet retrieve all data from api
         //else get data since the last date that is stored in the phone
         if (!hasData){
             stringifiedUrl = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artworksOnCampus/data.php?class=campusart"
         }else{
+            //get last date where data was modified
+            var lastDate = defaults.getLastDate()
+            lastDate = "2021-12-02"
             stringifiedUrl = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artworksOnCampus/data.php?class=campusart&lastModified=\(lastDate)"
         }
         //fetch data from url
@@ -132,6 +137,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     DispatchQueue.main.async{
                         //for each element of the data received save to core data
                         for element in artworkList.campusart{
+                            print(element.id)
+                            for i in (0..<self.coreArtwork.count){
+                                print(self.coreArtwork[i].id)
+                                /*if (element.id == self.coreArtwork[i].id){
+                                    self.coreArtwork.remove(at: i)
+                                }*/
+                            }
                             self.saveData(model: element)
                             //save the latest date
                             self.defaults.saveLastDate()
