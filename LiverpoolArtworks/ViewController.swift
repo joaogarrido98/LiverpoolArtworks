@@ -11,7 +11,6 @@ import CoreData
 import CoreLocation
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate, CLLocationManagerDelegate {
-    
     // MARK: - Class Variables
     //Class variables
     let defaults : Defaults = Defaults()
@@ -21,8 +20,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var allLocations : [String : Locations] = [:]
     var dataDictionary : [String : [ArtworkModel]] = [:]
     var chosen : [ArtworkModel]? = []
-    var selected : Int = -1
+    var selectedRow : Int = -1
+    var selectedSection : String = ""
+    var favourites : [String] = []
     
+    // MARK: - View did load
     override func viewDidLoad() {
         super.viewDidLoad()
         //initialize location
@@ -32,17 +34,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
         initData(mContext: managedContext)
-        
-       /* let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Artwork")
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-
-        do {
-            try managedContext.execute(deleteRequest)
-        } catch let error as NSError {
-            // TODO: handle the error
-        }*/
     }
-    
     
     // MARK: - Data setup
     private func initData(mContext : NSManagedObjectContext){
@@ -105,8 +97,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         do{
             //save the data
             try managedContext.save()
-        }catch let error as NSError{
-            print(error)
+            self.table.reloadData()
+        }catch _ as NSError{
+            return
         }
     }
     
@@ -119,9 +112,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             stringifiedUrl = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artworksOnCampus/data.php?class=campusart"
         }else{
             //get last date where data was modified
-            var lastDate = defaults.getLastDate()
-            lastDate = "2021-12-02"
-            stringifiedUrl = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artworksOnCampus/data.php?class=campusart&lastModified=\(lastDate)"
+            stringifiedUrl = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artworksOnCampus/data.php?class=campusart&lastModified=\(defaults.getLastDate())"
         }
         //fetch data from url
         if let url  = URL(string: stringifiedUrl) {
@@ -145,8 +136,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                                 }*/
                             }
                             self.saveData(model: element)
-                            //save the latest date
-                            self.defaults.saveLastDate()
                             self.coreArtwork.append(element)
                         }
                         self.getAllBuildings()
@@ -197,6 +186,59 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    
+    // MARK: - Favourites
+    //save id of the artwork the user favourites
+    private func saveToFavourites(id: String){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let toInsert = NSEntityDescription.insertNewObject(forEntityName: "UserFavourites", into: managedContext) as! UserFavourites
+        toInsert.id = id
+        do {
+            try managedContext.save()
+        }catch _ as NSError{
+            return
+        }
+    }
+    
+    //get all favourites from core data into string array
+    private func getFavourites(mContext : NSManagedObjectContext){
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "UserFavourites")
+        request.returnsObjectsAsFaults = false
+        do{
+            let results = try mContext.fetch(request) as? [UserFavourites]
+            if(results!.count > 0){
+                for element in results!{
+                    favourites.append(element.id ?? "")
+                }
+            }
+            self.table.reloadData()
+        }catch _ as NSError{
+            return
+        }
+    }
+    
+    //delete entry for a specific favourite artwork
+    private func deleteFavourite(id : String){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "UserFavourites")
+        request.predicate = NSPredicate.init(format: "id==\(id)")
+        let results = try? managedContext.fetch(request) as? [UserFavourites]
+        if(results!.count > 0){
+            for element in results!{
+                print(element)
+                managedContext.delete(element)
+            }
+        }
+        do{
+            try managedContext.save()
+        }catch _ as NSError{
+            return
+        }
+    }
+    
     // MARK: - Map setup
     private func initLocation(){
         locationManager.delegate = self as CLLocationManagerDelegate
@@ -217,12 +259,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     //gets annotation clicked title and performs segue to list controller
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        mapView.deselectAnnotation(view.annotation, animated: true)
         //if is the user annotation do nothing
         if (view.annotation as? MKUserLocation) != nil{ return }
         //if location has more than 1 artwork than show list of artworks
         //else go straight to the detail about that artwork
         if((view.annotation?.title) != nil){
+            mapView.deselectAnnotation(view.annotation, animated: true)
             chosen = dataDictionary[(view.annotation?.title)! ?? ""]
             if(chosen!.count > 1){
                 performSegue(withIdentifier: "toList", sender: self)
@@ -254,7 +296,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if(segue.identifier == "toDetail"){
             let destination = segue.destination as! DetailViewController
             //attribute the data to the variable in destination view
-            destination.artwork = coreArtwork[selected]
+            destination.artwork = dataDictionary[selectedSection]?[selectedRow]
         }
         if(segue.identifier == "toList"){
             let destination = segue.destination as! ListViewController
@@ -274,7 +316,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: - Table setup
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selected = indexPath.row
+        selectedRow = indexPath.row
+        selectedSection = locationNames[indexPath.section]
         performSegue(withIdentifier: "toDetail", sender: self)
     }
     
@@ -287,7 +330,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        let sectionName = locationNames[section]
+        return dataDictionary[sectionName]?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -296,7 +340,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return cell
     }
     
-    
+    // MARK: - IBOUTLETS
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var map: MKMapView!
 }
