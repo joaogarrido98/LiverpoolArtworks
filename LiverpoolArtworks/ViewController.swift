@@ -103,6 +103,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    //download image from the api
+    private func getImages() {
+        for element in coreArtwork {
+            if let url = URL(string: element.thumbnail){
+                let session = URLSession.shared
+                session.dataTask(with: url) { (data,response,err) in
+                    guard let imageData = data else { return }
+                    do {
+                        //put imqge in the image view
+                        DispatchQueue.main.async { [self] in
+                            self.table.reloadData()
+                        }
+                    }
+                }.resume()
+            }
+        }
+    }
+    
     //get data from the api
     private func getData(hasData: Bool){
         var stringifiedUrl : String
@@ -128,13 +146,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     DispatchQueue.main.async{
                         //for each element of the data received save to core data
                         for element in artworkList.campusart{
-                            print(element.id)
-                            for i in (0..<self.coreArtwork.count){
-                                print(self.coreArtwork[i].id)
-                                /*if (element.id == self.coreArtwork[i].id){
-                                    self.coreArtwork.remove(at: i)
-                                }*/
-                            }
                             self.saveData(model: element)
                             self.coreArtwork.append(element)
                         }
@@ -228,7 +239,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let results = try? managedContext.fetch(request) as? [UserFavourites]
         if(results!.count > 0){
             for element in results!{
-                print(element)
                 managedContext.delete(element)
             }
         }
@@ -314,7 +324,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBAction func unwind( _ seg: UIStoryboardSegue) {}
     
     // MARK: - Table setup
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRow = indexPath.row
         selectedSection = locationNames[indexPath.section]
@@ -336,10 +345,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
-        cell.textLabel?.text = "hello"
+        let location = locationNames[indexPath.section]
+        let artwork = dataDictionary[location]?[indexPath.row]
+        cell.textLabel?.text = artwork?.title
+        cell.detailTextLabel?.text = artwork?.artist
         return cell
     }
-    
     // MARK: - IBOUTLETS
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var map: MKMapView!
