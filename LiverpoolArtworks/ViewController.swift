@@ -361,9 +361,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             cell.imageView?.image = UIImage(data: images[artwork!.title]!)
         }
         if(favourites.contains(artwork!.title)){
-            cell.accessoryType = .checkmark
+            let image = UIImageView(image: UIImage(systemName: "heart.fill"))
+            image.tintColor = UIColor.red
+            cell.accessoryView = image
         }else{
-            cell.accessoryType = .none
+            cell.accessoryView = nil
         }
         return cell
     }
