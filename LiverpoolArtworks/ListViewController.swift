@@ -11,7 +11,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     //data received from
     var data : [ArtworkModel]?
     //class variables to store the images
-    var images : Array<Data>? = []
+    var images : [String : Data] = [:]
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data?.count ?? 0
@@ -21,12 +21,9 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         let cell = tableView.dequeueReusableCell(withIdentifier: "artCell", for: indexPath)
         cell.textLabel?.text = data?[indexPath.row].title
         cell.detailTextLabel?.text = data?[indexPath.row].artist
-        if(data?[indexPath.row].thumbnail != nil){
-            if(images != nil){
-                if(images!.indices.contains(indexPath.row)){
-                    cell.imageView?.image = UIImage(data: images![indexPath.row])
-                }
-            }
+        let title = data?[indexPath.row].title
+        if(images[title!] != nil){
+            cell.imageView?.image = UIImage(data: images[title!]!)
         }
         return cell
     }
@@ -36,14 +33,14 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         //get the image frol the api for each artwork
         if(data != nil){
             for art in data!{
-                getImage(path: art.thumbnail)
+                getImage(path: art.thumbnail, title: art.title)
             }
         }
     }
     
     //download image from the api
     //put it on the array so it can be used in the table
-    private func getImage(path: String) {
+    private func getImage(path: String, title: String) {
         if let url = URL(string: path){
             let session = URLSession.shared
             session.dataTask(with: url) { (data,response,err) in
@@ -51,7 +48,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                 do {
                     //put imqge in the image view
                     DispatchQueue.main.async { [self] in
-                        images?.append(imageData)
+                        images[title] = imageData
                         table.reloadData()
                     }
                 }
