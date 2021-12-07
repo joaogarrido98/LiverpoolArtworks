@@ -71,6 +71,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         enabled: elem.enabled ?? "")
                     self.coreArtwork.append(art)
                 }
+                self.getAllBuildings()
+                self.setAnnotations()
+                self.setDataDictionary()
+                self.getImages()
                 //get data since the last time it was updated
                 self.getData(hasData: true)
             }
