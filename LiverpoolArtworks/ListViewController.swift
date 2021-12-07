@@ -11,7 +11,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     //data received from
     var data : [ArtworkModel]?
     //class variables to store the images
-    var images : Array<Any>? = []
+    var images : Array<Data>? = []
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data?.count ?? 0
@@ -24,7 +24,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         if(data?[indexPath.row].thumbnail != nil){
             if(images != nil){
                 if(images!.indices.contains(indexPath.row)){
-                    cell.imageView?.image = UIImage(data: images![indexPath.row] as! Data)
+                    cell.imageView?.image = UIImage(data: images![indexPath.row])
                 }
             }
         }

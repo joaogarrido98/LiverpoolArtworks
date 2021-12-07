@@ -23,6 +23,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var selectedRow : Int = -1
     var selectedSection : String = ""
     var favourites : [String] = []
+    var images : [String : Data] = [:]
+    
     
     // MARK: - View did load
     override func viewDidLoad() {
@@ -33,6 +35,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //initialize data from core data or api call
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
+        
+        getFavourites(mContext: managedContext)
+        
         initData(mContext: managedContext)
     }
     
@@ -97,7 +102,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         do{
             //save the data
             try managedContext.save()
-            self.table.reloadData()
         }catch _ as NSError{
             return
         }
@@ -105,15 +109,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     //download image from the api
     private func getImages() {
-        for element in coreArtwork {
+        for element in coreArtwork{
             if let url = URL(string: element.thumbnail){
                 let session = URLSession.shared
                 session.dataTask(with: url) { (data,response,err) in
                     guard let imageData = data else { return }
                     do {
-                        //put imqge in the image view
                         DispatchQueue.main.async { [self] in
-                            self.table.reloadData()
+                            images[element.title] = imageData
+                            table.reloadData()
                         }
                     }
                 }.resume()
@@ -129,8 +133,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if (!hasData){
             stringifiedUrl = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artworksOnCampus/data.php?class=campusart"
         }else{
+            let date = defaults.getLastDate()
             //get last date where data was modified
-            stringifiedUrl = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artworksOnCampus/data.php?class=campusart&lastModified=\(defaults.getLastDate())"
+            stringifiedUrl = "https://cgi.csc.liv.ac.uk/~phil/Teaching/COMP228/artworksOnCampus/data.php?class=campusart&lastModified=\(date)"
         }
         //fetch data from url
         if let url  = URL(string: stringifiedUrl) {
@@ -149,10 +154,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                             self.saveData(model: element)
                             self.coreArtwork.append(element)
                         }
+                        self.defaults.saveLastDate()
                         self.getAllBuildings()
                         self.setAnnotations()
                         self.setDataDictionary()
-                        self.table.reloadData()
+                        self.getImages()
                     }
                 } catch let jsonErr {
                     print("Error decoding json", jsonErr)
@@ -200,12 +206,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // MARK: - Favourites
     //save id of the artwork the user favourites
-    private func saveToFavourites(id: String){
+    private func saveToFavourites(title: String){
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
-        
         let toInsert = NSEntityDescription.insertNewObject(forEntityName: "UserFavourites", into: managedContext) as! UserFavourites
-        toInsert.id = id
+        toInsert.title = title
         do {
             try managedContext.save()
         }catch _ as NSError{
@@ -221,21 +226,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let results = try mContext.fetch(request) as? [UserFavourites]
             if(results!.count > 0){
                 for element in results!{
-                    favourites.append(element.id ?? "")
+                    favourites.append(element.title ?? "")
                 }
             }
-            self.table.reloadData()
         }catch _ as NSError{
             return
         }
     }
     
     //delete entry for a specific favourite artwork
-    private func deleteFavourite(id : String){
+    private func deleteFavourite(title : String){
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "UserFavourites")
-        request.predicate = NSPredicate.init(format: "id==\(id)")
+        request.predicate = NSPredicate.init(format: "title==\(title)")
         let results = try? managedContext.fetch(request) as? [UserFavourites]
         if(results!.count > 0){
             for element in results!{
@@ -349,6 +353,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let artwork = dataDictionary[location]?[indexPath.row]
         cell.textLabel?.text = artwork?.title
         cell.detailTextLabel?.text = artwork?.artist
+        if(images[artwork!.title] != nil){
+            cell.imageView?.image = UIImage(data: images[artwork!.title]!)
+        }
+        if(favourites.contains(artwork!.title)){
+            cell.accessoryType = .checkmark
+        }
         return cell
     }
     // MARK: - IBOUTLETS
