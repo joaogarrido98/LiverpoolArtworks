@@ -362,6 +362,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         if(favourites.contains(artwork!.title)){
             cell.accessoryType = .checkmark
+        }else{
+            cell.accessoryType = .none
         }
         return cell
     }
