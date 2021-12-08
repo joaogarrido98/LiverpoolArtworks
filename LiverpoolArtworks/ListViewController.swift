@@ -13,12 +13,14 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     //class variables to store the images
     var images : [String : Data] = [:]
     
+    //return the number of artworks in array in case there are non return 0
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "artCell", for: indexPath)
+        //put the data in the cells
         cell.textLabel?.text = data?[indexPath.row].title
         cell.detailTextLabel?.text = data?[indexPath.row].artist
         let title = data?[indexPath.row].title
@@ -46,7 +48,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             session.dataTask(with: url) { (data,response,err) in
                 guard let imageData = data else { return }
                 do {
-                    //put imqge in the image view
+                    //put image in a image dictionary and reload table
                     DispatchQueue.main.async { [self] in
                         images[title] = imageData
                         table.reloadData()

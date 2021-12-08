@@ -17,16 +17,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="hybrid" translatesAutoresizingMaskIntoConstraints="NO" id="TMZ-JT-WUR">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="645"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="593"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="1xl-d3-ETY"/>
                                 </connections>
                             </mapView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="6yF-Lw-WEk">
-                                <rect key="frame" x="20" y="662" width="374" height="200"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="6yF-Lw-WEk">
+                                <rect key="frame" x="20" y="601" width="374" height="261"/>
+                                <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="5U6-SH-oOl"/>
+                                    <constraint firstAttribute="height" constant="261" id="5U6-SH-oOl"/>
                                 </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="myCell" textLabel="QlK-Pc-r6R" detailTextLabel="aVf-IR-evO" imageView="Xug-4Y-fdF" style="IBUITableViewCellStyleSubtitle" id="Vdc-Xe-dbm">
@@ -73,7 +73,7 @@
                             <constraint firstItem="TMZ-JT-WUR" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="LSW-bY-N4s"/>
                             <constraint firstItem="6yF-Lw-WEk" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="YD1-qd-kdu"/>
                             <constraint firstItem="TMZ-JT-WUR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="YyY-6O-MVe"/>
-                            <constraint firstItem="6yF-Lw-WEk" firstAttribute="top" secondItem="TMZ-JT-WUR" secondAttribute="bottom" constant="17" id="dQn-Yd-hST"/>
+                            <constraint firstItem="6yF-Lw-WEk" firstAttribute="top" secondItem="TMZ-JT-WUR" secondAttribute="bottom" constant="8" id="dQn-Yd-hST"/>
                         </constraints>
                     </view>
                     <connections>
@@ -86,7 +86,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="132" y="-107"/>
+            <point key="canvasLocation" x="131.8840579710145" y="-107.14285714285714"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="ID8-Mu-Spy">
@@ -162,9 +162,9 @@
                             <constraint firstItem="iHh-ZY-HkG" firstAttribute="top" secondItem="23P-av-UTz" secondAttribute="top" id="4fg-c0-8fm"/>
                             <constraint firstItem="GZ1-yG-330" firstAttribute="leading" secondItem="23P-av-UTz" secondAttribute="leading" constant="20" id="7E9-oW-sjg"/>
                             <constraint firstItem="23P-av-UTz" firstAttribute="trailing" secondItem="fVL-X5-aXY" secondAttribute="trailing" constant="20" id="9dd-Ar-RYO"/>
-                            <constraint firstItem="23P-av-UTz" firstAttribute="trailing" secondItem="iHh-ZY-HkG" secondAttribute="trailing" constant="332" id="9kO-YA-zf7"/>
                             <constraint firstItem="6t3-cN-KTZ" firstAttribute="leading" secondItem="23P-av-UTz" secondAttribute="leading" constant="20" id="BAE-YJ-sft"/>
                             <constraint firstItem="23P-av-UTz" firstAttribute="trailing" secondItem="6t3-cN-KTZ" secondAttribute="trailing" constant="20" id="BzU-Xu-w4Q"/>
+                            <constraint firstItem="iHh-ZY-HkG" firstAttribute="leading" secondItem="23P-av-UTz" secondAttribute="leading" constant="26" id="EKl-wb-72h"/>
                             <constraint firstItem="fVL-X5-aXY" firstAttribute="top" secondItem="GZ1-yG-330" secondAttribute="bottom" constant="8" symbolic="YES" id="ElL-Mv-Elv"/>
                             <constraint firstItem="9oO-Xq-jOX" firstAttribute="leading" secondItem="23P-av-UTz" secondAttribute="leading" id="MiT-UH-h0u"/>
                             <constraint firstItem="9oO-Xq-jOX" firstAttribute="top" secondItem="6t3-cN-KTZ" secondAttribute="bottom" constant="28" id="PYp-KK-HBq"/>

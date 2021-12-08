@@ -32,17 +32,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //initialize location
         initLocation()
         
+        //get allFavourites
+        getFavourites()
+        
         //initialize data from core data or api call
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
-        getFavourites(mContext: managedContext)
-        
-        initData(mContext: managedContext)
+        initData()
     }
     
     // MARK: - Data setup
-    private func initData(mContext : NSManagedObjectContext){
+    private func initData(){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let mContext = appDelegate.persistentContainer.viewContext
         //fetch data from core data
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Artwork")
         request.returnsObjectsAsFaults = false
@@ -207,9 +207,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    
     // MARK: - Favourites
-    //save id of the artwork the user favourites
+    //save title of the artwork the user favourites
     private func saveToFavourites(title: String){
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -223,9 +222,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     //get all favourites from core data into string array
-    private func getFavourites(mContext : NSManagedObjectContext){
+    private func getFavourites(){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let mContext = appDelegate.persistentContainer.viewContext
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "UserFavourites")
         request.returnsObjectsAsFaults = false
+        //clear existing favourites
+        favourites = []
         do{
             let results = try mContext.fetch(request) as? [UserFavourites]
             if(results!.count > 0){
@@ -351,15 +354,52 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return dataDictionary[sectionName]?.count ?? 0
     }
     
+    //add swiping gestures for adding/deleting from favourites 
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        //get specific artwork
+        let location = self.locationNames[indexPath.section]
+        let artwork = self.dataDictionary[location]?[indexPath.row]
+        var isFavourite = false
+        //check if its in favourites
+        if(favourites.contains(artwork!.title)){
+            isFavourite = true
+        }
+        let shareAction = UIContextualAction(style: .normal, title: "Like") { (action, sourceView, completionHandler) in
+            if(artwork?.title == nil){return}
+            //if is a favourite delete it from favourites if not add to favourites
+            if(isFavourite){
+                self.deleteFavourite(title: artwork!.title)
+            }else{
+                self.saveToFavourites(title: artwork!.title)
+            }
+            //reload table and favourites
+            self.getFavourites()
+            self.table.reloadData()
+        }
+        shareAction.backgroundColor = UIColor.orange
+        if(isFavourite){
+            shareAction.image = UIImage(systemName: "heart.slash.fill")
+        }else{
+            shareAction.image = UIImage(systemName: "heart.fill")
+        }
+        
+        let swipeConfiguration = UISwipeActionsConfiguration(actions: [shareAction])
+        swipeConfiguration.performsFirstActionWithFullSwipe = false
+        return swipeConfiguration
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
+        //get the specific artwork and add the data to the cell
         let location = locationNames[indexPath.section]
         let artwork = dataDictionary[location]?[indexPath.row]
         cell.textLabel?.text = artwork?.title
         cell.detailTextLabel?.text = artwork?.artist
+        //put image onto cell
         if(images[artwork!.title] != nil){
             cell.imageView?.image = UIImage(data: images[artwork!.title]!)
         }
+        //check if its a user favourite if is show a heart else dont show anything
         if(favourites.contains(artwork!.title)){
             let image = UIImageView(image: UIImage(systemName: "heart.fill"))
             image.tintColor = UIColor.red
@@ -369,6 +409,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         return cell
     }
+    
     // MARK: - IBOUTLETS
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var map: MKMapView!

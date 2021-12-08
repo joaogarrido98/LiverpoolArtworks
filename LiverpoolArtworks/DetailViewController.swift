@@ -80,7 +80,7 @@ class DetailViewController: UIViewController {
             self.view.addSubview(largeView) }, completion: nil)
     }
     
-    //dismiss the view created previous
+    //dismiss the image view created previous
     @objc func dismissFullscreenImage(_ sender: UITapGestureRecognizer) {
         sender.view?.removeFromSuperview()
     }
