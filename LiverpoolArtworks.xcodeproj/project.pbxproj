@@ -11,7 +11,7 @@
 		950657EB274F0FD10097350A /* Artwork+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950657E9274F0FD10097350A /* Artwork+CoreDataProperties.swift */; };
 		950657EF274F16CB0097350A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950657EE274F16CB0097350A /* DetailViewController.swift */; };
 		950657F1274F21850097350A /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950657F0274F21850097350A /* Defaults.swift */; };
-		954B877527614EE400748754 /* Favourites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954B877427614EE400748754 /* Favourites.swift */; };
+		954B877527614EE400748754 /* CoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954B877427614EE400748754 /* CoreManager.swift */; };
 		955536BB2751751000197094 /* UoL campus walk.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 955536BA2751751000197094 /* UoL campus walk.gpx */; };
 		958EFB5D275650D3009C85EE /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958EFB5C275650D3009C85EE /* ListViewController.swift */; };
 		D34A441D27513C6D000D7039 /* default.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D34A441C27513C6D000D7039 /* default.jpeg */; };
@@ -31,7 +31,7 @@
 		950657E9274F0FD10097350A /* Artwork+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Artwork+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		950657EE274F16CB0097350A /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		950657F0274F21850097350A /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
-		954B877427614EE400748754 /* Favourites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Favourites.swift; sourceTree = "<group>"; };
+		954B877427614EE400748754 /* CoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreManager.swift; sourceTree = "<group>"; };
 		955536BA2751751000197094 /* UoL campus walk.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "UoL campus walk.gpx"; sourceTree = "<group>"; };
 		958EFB5C275650D3009C85EE /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		D34A441C27513C6D000D7039 /* default.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default.jpeg; sourceTree = "<group>"; };
@@ -93,7 +93,7 @@
 				D3709814274E7C2A00354AE2 /* AppDelegate.swift */,
 				D3709816274E7C2A00354AE2 /* SceneDelegate.swift */,
 				D3709818274E7C2A00354AE2 /* ViewController.swift */,
-				954B877427614EE400748754 /* Favourites.swift */,
+				954B877427614EE400748754 /* CoreManager.swift */,
 				958EFB5C275650D3009C85EE /* ListViewController.swift */,
 				950657EE274F16CB0097350A /* DetailViewController.swift */,
 				D38E4F6927552B8500BF3FAD /* Locations.swift */,
@@ -188,7 +188,7 @@
 				D3709817274E7C2A00354AE2 /* SceneDelegate.swift in Sources */,
 				958EFB5D275650D3009C85EE /* ListViewController.swift in Sources */,
 				D370981F274E7C2A00354AE2 /* LiverpoolArtworks.xcdatamodeld in Sources */,
-				954B877527614EE400748754 /* Favourites.swift in Sources */,
+				954B877527614EE400748754 /* CoreManager.swift in Sources */,
 				950657EB274F0FD10097350A /* Artwork+CoreDataProperties.swift in Sources */,
 				D370982E274E7F4300354AE2 /* artworkModel.swift in Sources */,
 				D38E4F6A27552B8500BF3FAD /* Locations.swift in Sources */,

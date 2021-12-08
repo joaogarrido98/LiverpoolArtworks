@@ -14,7 +14,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: - Class Variables
     //Class variables
     let defaults : Defaults = Defaults()
-    let favouritesClass : Favourites = Favourites()
+    let coreManager : CoreManager = CoreManager()
     var locationManager = CLLocationManager()
     var coreArtwork : [ArtworkModel] = []
     var locationNames : Array<String> = []
@@ -34,7 +34,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         initLocation()
         
         //get allFavourites
-        favourites = favouritesClass.getFavourites()
+        favourites = coreManager.getFavourites()
         
         //initialize data from core data or api call
         initData()
@@ -43,7 +43,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //on view appear get new favourites and reload data in case any was updated on the detail page
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        favourites = favouritesClass.getFavourites()
+        favourites = coreManager.getFavourites()
         table.reloadData()
     }
     
@@ -91,34 +91,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    //save data to persistent core data
-    private func saveData(model: ArtworkModel){
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        //insert new object into core data from the model gotten from the api
-        let toInsert = NSEntityDescription.insertNewObject(forEntityName: "Artwork", into: managedContext) as! Artwork
-        toInsert.artist = model.artist
-        toInsert.title = model.title
-        toInsert.id = model.id
-        toInsert.yearOfWork = model.yearOfWork
-        toInsert.type = model.type
-        toInsert.information = model.Information
-        toInsert.lat = model.lat
-        toInsert.long = model.long
-        toInsert.location = model.location
-        toInsert.locationNotes = model.locationNotes
-        toInsert.imagefileName = model.ImagefileName
-        toInsert.thumbnail = model.thumbnail
-        toInsert.lastModified = model.lastModified
-        toInsert.enabled = model.enabled
-        do{
-            //save the data
-            try managedContext.save()
-        }catch _ as NSError{
-            return
-        }
-    }
-    
     //download image from the api
     private func getImages() {
         for element in coreArtwork{
@@ -128,6 +100,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     guard let imageData = data else { return }
                     do {
                         DispatchQueue.main.async { [self] in
+                            //add image to the dictionary 
                             images[element.title] = imageData
                             table.reloadData()
                         }
@@ -163,8 +136,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     DispatchQueue.main.async{
                         //for each element of the data received save to core data
                         for element in artworkList.campusart{
-                            self.saveData(model: element)
-                            self.coreArtwork.append(element)
+                            self.checkForDuplicate(art: element)
                         }
                         self.defaults.saveLastDate()
                         self.getAllBuildings()
@@ -177,6 +149,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             }.resume()
         }
+    }
+    
+    //check is duplicate if yes delete and put the new one
+    private func checkForDuplicate(art: ArtworkModel){
+        for (index,artwork) in coreArtwork.enumerated() {
+            //if artwork already exists we delete the old one and put new one
+            if(artwork.title == art.title){
+                self.coreManager.deleteArtwork(id: artwork.id)
+                coreArtwork.remove(at: index)
+            }
+        }
+        self.coreManager.saveData(model: art)
+        self.coreArtwork.append(art)
+        self.table.reloadData()
     }
     
     //get all possible buildings and its coordinates
@@ -266,7 +252,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     // MARK: - Segue
-    
     //prepare the segue with the data from core data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "toDetail"){
@@ -323,12 +308,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if(artwork?.title == nil){return}
             //if is a favourite delete it from favourites if not add to favourites
             if(isFavourite){
-                self.favouritesClass.deleteFavourite(title: artwork!.title)
+                self.coreManager.deleteFavourite(title: artwork!.title)
             }else{
-                self.favouritesClass.saveToFavourites(title: artwork!.title)
+                self.coreManager.saveToFavourites(title: artwork!.title)
             }
             //reload table and favourites
-            self.favourites = self.favouritesClass.getFavourites()
+            self.favourites = self.coreManager.getFavourites()
             self.table.reloadData()
         }
         shareAction.backgroundColor = UIColor.orange

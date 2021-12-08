@@ -8,7 +8,7 @@
 import UIKit
 
 class DetailViewController: UIViewController {
-    let favouritesClass : Favourites = Favourites()
+    let coreManager : CoreManager = CoreManager()
     var favourites : [String] = []
     var isFavourite : Bool = false
     //data gotten from the segue
@@ -20,7 +20,7 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         favImage.tintColor = .red
-        favourites = favouritesClass.getFavourites()
+        favourites = coreManager.getFavourites()
         //if values are not nil put it on the UI
         if(artwork?.locationNotes != nil) {
             locationLabel.text = artwork!.locationNotes
@@ -101,16 +101,16 @@ class DetailViewController: UIViewController {
         if(artwork?.title != nil){
             //if is favourite delete from favourites else add to favourites and change the heart
             if(isFavourite){
-                favouritesClass.deleteFavourite(title: artwork!.title)
+                coreManager.deleteFavourite(title: artwork!.title)
                 favImage.setImage(UIImage(systemName: "heart"), for: .normal)
                 isFavourite = false
             }else{
-                favouritesClass.saveToFavourites(title: artwork!.title)
+                coreManager.saveToFavourites(title: artwork!.title)
                 favImage.setImage(UIImage(systemName: "heart.fill"), for: .normal)
                 isFavourite = true
             }
             //get the new list of favourites
-            favourites = favouritesClass.getFavourites()
+            favourites = coreManager.getFavourites()
         }
     }
     
