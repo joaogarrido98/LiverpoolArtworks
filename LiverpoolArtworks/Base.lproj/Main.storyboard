@@ -154,6 +154,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sy3-KL-FzG">
+                                <rect key="frame" x="370" y="44" width="24" height="14"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain"/>
+                                <connections>
+                                    <action selector="favBtn:" destination="Ond-n3-GGL" eventType="touchUpInside" id="8Kf-M9-Uj9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="23P-av-UTz"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -164,6 +172,7 @@
                             <constraint firstItem="23P-av-UTz" firstAttribute="trailing" secondItem="fVL-X5-aXY" secondAttribute="trailing" constant="20" id="9dd-Ar-RYO"/>
                             <constraint firstItem="6t3-cN-KTZ" firstAttribute="leading" secondItem="23P-av-UTz" secondAttribute="leading" constant="20" id="BAE-YJ-sft"/>
                             <constraint firstItem="23P-av-UTz" firstAttribute="trailing" secondItem="6t3-cN-KTZ" secondAttribute="trailing" constant="20" id="BzU-Xu-w4Q"/>
+                            <constraint firstItem="sy3-KL-FzG" firstAttribute="top" secondItem="23P-av-UTz" secondAttribute="top" id="DrR-FM-Wo9"/>
                             <constraint firstItem="iHh-ZY-HkG" firstAttribute="leading" secondItem="23P-av-UTz" secondAttribute="leading" constant="26" id="EKl-wb-72h"/>
                             <constraint firstItem="fVL-X5-aXY" firstAttribute="top" secondItem="GZ1-yG-330" secondAttribute="bottom" constant="8" symbolic="YES" id="ElL-Mv-Elv"/>
                             <constraint firstItem="9oO-Xq-jOX" firstAttribute="leading" secondItem="23P-av-UTz" secondAttribute="leading" id="MiT-UH-h0u"/>
@@ -178,6 +187,7 @@
                             <constraint firstItem="ufE-L7-IVP" firstAttribute="top" secondItem="iHh-ZY-HkG" secondAttribute="bottom" constant="8" symbolic="YES" id="kpF-51-btM"/>
                             <constraint firstItem="iHh-ZY-HkG" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="23P-av-UTz" secondAttribute="leading" id="mvq-pe-MxR"/>
                             <constraint firstItem="23P-av-UTz" firstAttribute="trailing" secondItem="ufE-L7-IVP" secondAttribute="trailing" constant="20" id="nZT-lA-UqX"/>
+                            <constraint firstItem="23P-av-UTz" firstAttribute="trailing" secondItem="sy3-KL-FzG" secondAttribute="trailing" constant="20" id="oN2-Yj-fki"/>
                             <constraint firstItem="ufE-L7-IVP" firstAttribute="leading" secondItem="23P-av-UTz" secondAttribute="leading" constant="20" id="roL-Tk-NGX"/>
                             <constraint firstItem="23P-av-UTz" firstAttribute="trailing" secondItem="qdF-JK-Led" secondAttribute="trailing" constant="20" id="tnf-c0-BKS"/>
                         </constraints>
@@ -185,6 +195,7 @@
                     <navigationItem key="navigationItem" id="fC4-Vi-Df3"/>
                     <connections>
                         <outlet property="artistLabel" destination="6t3-cN-KTZ" id="93n-vJ-nYG"/>
+                        <outlet property="favImage" destination="sy3-KL-FzG" id="Prt-Np-ohY"/>
                         <outlet property="imageLabel" destination="9oO-Xq-jOX" id="64x-bQ-kb5"/>
                         <outlet property="locationLabel" destination="ufE-L7-IVP" id="lNJ-lr-agd"/>
                         <outlet property="madeLabel" destination="GZ1-yG-330" id="cAf-2M-Vf9"/>

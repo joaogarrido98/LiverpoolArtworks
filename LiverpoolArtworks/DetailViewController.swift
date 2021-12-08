@@ -8,14 +8,19 @@
 import UIKit
 
 class DetailViewController: UIViewController {
+    let favouritesClass : Favourites = Favourites()
+    var favourites : [String] = []
+    var isFavourite : Bool = false
     //data gotten from the segue
     var artwork : ArtworkModel?
     //class variables
     var downloadedImage : UIImage?
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        favImage.tintColor = .red
+        favourites = favouritesClass.getFavourites()
         //if values are not nil put it on the UI
         if(artwork?.locationNotes != nil) {
             locationLabel.text = artwork!.locationNotes
@@ -35,6 +40,13 @@ class DetailViewController: UIViewController {
         
         if(artwork?.title != nil){
             titleLabel.text = artwork!.title
+            //if is favourite put a filled heart if not an empty heart
+            if(favourites.contains(artwork!.title)){
+                isFavourite = true
+                favImage.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            }else{
+                favImage.setImage(UIImage(systemName: "heart"), for: .normal)
+            }
         }
         
         if(artwork?.ImagefileName != nil){
@@ -85,6 +97,24 @@ class DetailViewController: UIViewController {
         sender.view?.removeFromSuperview()
     }
     
+    @IBAction func favBtn(_ sender: Any) {
+        if(artwork?.title != nil){
+            //if is favourite delete from favourites else add to favourites and change the heart
+            if(isFavourite){
+                favouritesClass.deleteFavourite(title: artwork!.title)
+                favImage.setImage(UIImage(systemName: "heart"), for: .normal)
+                isFavourite = false
+            }else{
+                favouritesClass.saveToFavourites(title: artwork!.title)
+                favImage.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                isFavourite = true
+            }
+            //get the new list of favourites
+            favourites = favouritesClass.getFavourites()
+        }
+    }
+    
+    @IBOutlet weak var favImage: UIButton!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var imageLabel: UIImageView!

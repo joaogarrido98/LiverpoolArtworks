@@ -14,6 +14,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: - Class Variables
     //Class variables
     let defaults : Defaults = Defaults()
+    let favouritesClass : Favourites = Favourites()
     var locationManager = CLLocationManager()
     var coreArtwork : [ArtworkModel] = []
     var locationNames : Array<String> = []
@@ -33,10 +34,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         initLocation()
         
         //get allFavourites
-        getFavourites()
+        favourites = favouritesClass.getFavourites()
         
         //initialize data from core data or api call
         initData()
+    }
+    
+    //on view appear get new favourites and reload data in case any was updated on the detail page
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        favourites = favouritesClass.getFavourites()
+        table.reloadData()
     }
     
     // MARK: - Data setup
@@ -207,65 +215,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    // MARK: - Favourites
-    //save title of the artwork the user favourites
-    private func saveToFavourites(title: String){
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let toInsert = NSEntityDescription.insertNewObject(forEntityName: "UserFavourites", into: managedContext) as! UserFavourites
-        toInsert.title = title
-        do {
-            //save the new core data inserted
-            try managedContext.save()
-        }catch _ as NSError{
-            return
-        }
-    }
-    
-    //get all favourites from core data into string array
-    private func getFavourites(){
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let mContext = appDelegate.persistentContainer.viewContext
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "UserFavourites")
-        request.returnsObjectsAsFaults = false
-        //clear existing favourites
-        favourites = []
-        do{
-            //fetch all the favourites stored in core data
-            let results = try mContext.fetch(request) as? [UserFavourites]
-            if(results!.count > 0){
-                //add favourites to a class array so they can be used
-                for element in results!{
-                    favourites.append(element.title ?? "")
-                }
-            }
-        }catch _ as NSError{
-            return
-        }
-    }
-    
-    //delete entry for a specific favourite artwork
-    private func deleteFavourite(title : String){
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        //get the core data object where the title equals
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "UserFavourites")
-        request.predicate = NSPredicate(format: "title == %@", title)
-        let results = try? managedContext.fetch(request) as? [UserFavourites]
-        if(results!.count > 0){
-            for element in results!{
-                //delete the object
-                managedContext.delete(element)
-            }
-        }
-        do{
-            //save the changes
-            try managedContext.save()
-        }catch _ as NSError{
-            return
-        }
-    }
-    
     // MARK: - Map setup
     private func initLocation(){
         locationManager.delegate = self as CLLocationManagerDelegate
@@ -374,12 +323,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if(artwork?.title == nil){return}
             //if is a favourite delete it from favourites if not add to favourites
             if(isFavourite){
-                self.deleteFavourite(title: artwork!.title)
+                self.favouritesClass.deleteFavourite(title: artwork!.title)
             }else{
-                self.saveToFavourites(title: artwork!.title)
+                self.favouritesClass.saveToFavourites(title: artwork!.title)
             }
             //reload table and favourites
-            self.getFavourites()
+            self.favourites = self.favouritesClass.getFavourites()
             self.table.reloadData()
         }
         shareAction.backgroundColor = UIColor.orange
