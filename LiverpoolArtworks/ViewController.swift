@@ -261,7 +261,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         if(segue.identifier == "toList"){
             let destination = segue.destination as! ListViewController
-            destination.data = chosen
+            destination.data = chosen ?? []
         }
         if(segue.identifier == "toDetailFromAnnotation"){
             let destination = segue.destination as! DetailViewController

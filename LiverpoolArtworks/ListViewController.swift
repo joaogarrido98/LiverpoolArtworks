@@ -9,23 +9,33 @@ import UIKit
 
 class ListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
     //data received from
-    var data : [ArtworkModel]?
+    var data : [ArtworkModel] = []
     //class variables to store the images
     var images : [String : Data] = [:]
+    let coreManager : CoreManager = CoreManager()
+    var favourites : [String] = []
     
     //return the number of artworks in array in case there are non return 0
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data?.count ?? 0
+        return data.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "artCell", for: indexPath)
         //put the data in the cells
-        cell.textLabel?.text = data?[indexPath.row].title
-        cell.detailTextLabel?.text = data?[indexPath.row].artist
-        let title = data?[indexPath.row].title
-        if(images[title!] != nil){
-            cell.imageView?.image = UIImage(data: images[title!]!)
+        cell.textLabel?.text = data[indexPath.row].title
+        cell.detailTextLabel?.text = data[indexPath.row].artist
+        let title = data[indexPath.row].title
+        if(images[title] != nil){
+            cell.imageView?.image = UIImage(data: images[title]!)
+        }
+        //if it's favourite add heart icon to cell
+        if(favourites.contains(title)){
+            let image = UIImageView(image: UIImage(systemName: "heart.fill"))
+            image.tintColor = UIColor.red
+            cell.accessoryView = image
+        }else{
+            cell.accessoryView = nil
         }
         return cell
     }
@@ -33,11 +43,11 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         //get the image frol the api for each artwork
-        if(data != nil){
-            for art in data!{
-                getImage(path: art.thumbnail, title: art.title)
-            }
+        for art in data{
+            getImage(path: art.thumbnail, title: art.title)
         }
+        
+        favourites = coreManager.getFavourites()
     }
     
     //download image from the api
@@ -63,12 +73,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         if(segue.identifier == "toDetailFromList"){
             let destination = segue.destination as! DetailViewController
             let selectedRow = table.indexPathForSelectedRow!.row
-            if let data = data?[selectedRow] {
-                //attribute the data to the variable in destination view
-                destination.artwork = data
-            }
+            //attribute the data to the variable in destination view
+            destination.artwork = data[selectedRow]
         }
     }
-
+    
     @IBOutlet weak var table: UITableView!
 }
