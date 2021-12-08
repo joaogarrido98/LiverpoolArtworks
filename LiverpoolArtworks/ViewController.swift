@@ -215,6 +215,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let toInsert = NSEntityDescription.insertNewObject(forEntityName: "UserFavourites", into: managedContext) as! UserFavourites
         toInsert.title = title
         do {
+            //save the new core data inserted
             try managedContext.save()
         }catch _ as NSError{
             return
@@ -230,8 +231,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //clear existing favourites
         favourites = []
         do{
+            //fetch all the favourites stored in core data
             let results = try mContext.fetch(request) as? [UserFavourites]
             if(results!.count > 0){
+                //add favourites to a class array so they can be used
                 for element in results!{
                     favourites.append(element.title ?? "")
                 }
@@ -245,15 +248,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     private func deleteFavourite(title : String){
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
+        //get the core data object where the title equals
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "UserFavourites")
-        request.predicate = NSPredicate.init(format: "title==\(title)")
+        request.predicate = NSPredicate(format: "title == %@", title)
         let results = try? managedContext.fetch(request) as? [UserFavourites]
         if(results!.count > 0){
             for element in results!{
+                //delete the object
                 managedContext.delete(element)
             }
         }
         do{
+            //save the changes
             try managedContext.save()
         }catch _ as NSError{
             return
@@ -354,7 +360,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return dataDictionary[sectionName]?.count ?? 0
     }
     
-    //add swiping gestures for adding/deleting from favourites 
+    //add swiping gestures for adding/deleting from favourites
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         //get specific artwork
         let location = self.locationNames[indexPath.section]
