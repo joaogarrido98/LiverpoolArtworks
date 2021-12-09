@@ -100,7 +100,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     guard let imageData = data else { return }
                     do {
                         DispatchQueue.main.async { [self] in
-                            //add image to the dictionary 
+                            //add image to the dictionary
                             images[element.title] = imageData
                             table.reloadData()
                         }
@@ -216,7 +216,30 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
             let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.0018, longitudeDelta: 0.0018))
             self.map.setRegion(region, animated: true)
+            //orderByDistance(location: location)
         }
+    }
+    
+    //function that orders the table depending on the distance
+    private func orderByDistance(location : CLLocation){
+        var locations : [String] = []
+        var distance : Double = 0.0
+        print(allLocations)
+        for loc in allLocations {
+            guard let lat = loc.value.lat else { return }
+            guard let long = loc.value.lon else { return }
+            let coordinate = CLLocation(latitude: lat , longitude: long)
+            let distanceInMeters = location.distance(from: coordinate)
+            if(distanceInMeters < distance){
+                locations.insert(loc.key, at: 0)
+            }else{
+                locations.append(loc.key)
+            }
+            distance = distanceInMeters
+            print(locations)
+        }
+        locationNames = locations
+        table.reloadData()
     }
     
     //gets annotation clicked title and performs segue to list controller
