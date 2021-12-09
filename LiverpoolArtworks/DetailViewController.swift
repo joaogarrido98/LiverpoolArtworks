@@ -11,9 +11,7 @@ class DetailViewController: UIViewController {
     let coreManager : CoreManager = CoreManager()
     var favourites : [String] = []
     var isFavourite : Bool = false
-    //data gotten from the segue
     var artwork : ArtworkModel?
-    //class variables
     var downloadedImage : UIImage?
     
     

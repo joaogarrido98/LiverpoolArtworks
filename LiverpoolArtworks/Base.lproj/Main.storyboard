@@ -26,7 +26,7 @@
                                 <rect key="frame" x="20" y="601" width="374" height="261"/>
                                 <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="261" id="5U6-SH-oOl"/>
+                                    <constraint firstAttribute="height" constant="261" id="ong-2Y-8cd"/>
                                 </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="myCell" textLabel="QlK-Pc-r6R" detailTextLabel="aVf-IR-evO" imageView="Xug-4Y-fdF" style="IBUITableViewCellStyleSubtitle" id="Vdc-Xe-dbm">
@@ -67,10 +67,12 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="6yF-Lw-WEk" firstAttribute="top" secondItem="TMZ-JT-WUR" secondAttribute="bottom" constant="8" symbolic="YES" id="BIq-ao-Hpl"/>
                             <constraint firstItem="TMZ-JT-WUR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="EU7-I4-b0q"/>
                             <constraint firstItem="6yF-Lw-WEk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="HgC-Ky-mvY"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="6yF-Lw-WEk" secondAttribute="trailing" constant="20" id="J03-r5-05f"/>
                             <constraint firstItem="TMZ-JT-WUR" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="LSW-bY-N4s"/>
+                            <constraint firstItem="6yF-Lw-WEk" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="RaR-2o-aq0"/>
                             <constraint firstItem="6yF-Lw-WEk" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="YD1-qd-kdu"/>
                             <constraint firstItem="TMZ-JT-WUR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="YyY-6O-MVe"/>
                             <constraint firstItem="6yF-Lw-WEk" firstAttribute="top" secondItem="TMZ-JT-WUR" secondAttribute="bottom" constant="8" id="dQn-Yd-hST"/>

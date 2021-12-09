@@ -40,13 +40,45 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         return cell
     }
     
+    //add swiping gestures for adding/deleting from favourites
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        //get specific artwork
+        let artwork = data[indexPath.row]
+        var isFavourite = false
+        //check if its in favourites
+        if(favourites.contains(artwork.title)){
+            isFavourite = true
+        }
+        let shareAction = UIContextualAction(style: .normal, title: "Like") { (action, sourceView, completionHandler) in
+            //if is a favourite delete it from favourites if not add to favourites
+            if(isFavourite){
+                self.coreManager.deleteFavourite(title: artwork.title)
+            }else{
+                self.coreManager.saveToFavourites(title: artwork.title)
+            }
+            //reload table and favourites
+            self.favourites = self.coreManager.getFavourites()
+            self.table.reloadData()
+        }
+        shareAction.backgroundColor = UIColor.orange
+        //change type of heart according to if is favourite or not
+        if(isFavourite){
+            shareAction.image = UIImage(systemName: "heart.slash.fill")
+        }else{
+            shareAction.image = UIImage(systemName: "heart.fill")
+        }
+        //add the action to the swipez configuration
+        let swipeConfiguration = UISwipeActionsConfiguration(actions: [shareAction])
+        swipeConfiguration.performsFirstActionWithFullSwipe = false
+        return swipeConfiguration
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //get the image frol the api for each artwork
         for art in data{
             getImage(path: art.thumbnail, title: art.title)
         }
-        
         favourites = coreManager.getFavourites()
     }
     

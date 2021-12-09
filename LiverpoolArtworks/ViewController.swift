@@ -216,27 +216,36 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
             let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.0018, longitudeDelta: 0.0018))
             self.map.setRegion(region, animated: true)
-            //orderByDistance(location: location)
+            orderByDistance(location: location)
         }
     }
     
     //function that orders the table depending on the distance
     private func orderByDistance(location : CLLocation){
         var locations : [String] = []
-        var distance : Double = 0.0
-        print(allLocations)
+        var distances : [Double] = []
         for loc in allLocations {
             guard let lat = loc.value.lat else { return }
             guard let long = loc.value.lon else { return }
             let coordinate = CLLocation(latitude: lat , longitude: long)
             let distanceInMeters = location.distance(from: coordinate)
-            if(distanceInMeters < distance){
-                locations.insert(loc.key, at: 0)
-            }else{
+            if(distances.isEmpty){
+                distances.append(distanceInMeters)
                 locations.append(loc.key)
+            }else{
+                for (index, element) in distances.enumerated(){
+                    if(distanceInMeters < element){
+                        locations[index] = loc.key
+                        distances[index] = distanceInMeters
+                    }else{
+                        if(index == distances.count - 1){
+                            locations.append(loc.key)
+                            distances.append(distanceInMeters)
+                        }
+                       continue
+                    }
+                }
             }
-            distance = distanceInMeters
-            print(locations)
         }
         locationNames = locations
         table.reloadData()
@@ -315,40 +324,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionName = locationNames[section]
         return dataDictionary[sectionName]?.count ?? 0
-    }
-    
-    //add swiping gestures for adding/deleting from favourites
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        //get specific artwork
-        let location = self.locationNames[indexPath.section]
-        let artwork = self.dataDictionary[location]?[indexPath.row]
-        var isFavourite = false
-        //check if its in favourites
-        if(favourites.contains(artwork!.title)){
-            isFavourite = true
-        }
-        let shareAction = UIContextualAction(style: .normal, title: "Like") { (action, sourceView, completionHandler) in
-            if(artwork?.title == nil){return}
-            //if is a favourite delete it from favourites if not add to favourites
-            if(isFavourite){
-                self.coreManager.deleteFavourite(title: artwork!.title)
-            }else{
-                self.coreManager.saveToFavourites(title: artwork!.title)
-            }
-            //reload table and favourites
-            self.favourites = self.coreManager.getFavourites()
-            self.table.reloadData()
-        }
-        shareAction.backgroundColor = UIColor.orange
-        if(isFavourite){
-            shareAction.image = UIImage(systemName: "heart.slash.fill")
-        }else{
-            shareAction.image = UIImage(systemName: "heart.fill")
-        }
-        
-        let swipeConfiguration = UISwipeActionsConfiguration(actions: [shareAction])
-        swipeConfiguration.performsFirstActionWithFullSwipe = false
-        return swipeConfiguration
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
