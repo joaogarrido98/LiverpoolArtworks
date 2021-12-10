@@ -100,6 +100,7 @@
                         <subviews>
                             <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9oO-Xq-jOX">
                                 <rect key="frame" x="0.0" y="171" width="414" height="414"/>
+                                <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="414" id="Ddx-kg-0dD"/>
@@ -164,6 +165,9 @@
                                     <action selector="favBtn:" destination="Ond-n3-GGL" eventType="touchUpInside" id="8Kf-M9-Uj9"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="AUy-UO-9gm">
+                                <rect key="frame" x="183" y="356" width="48" height="45"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="23P-av-UTz"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -174,11 +178,13 @@
                             <constraint firstItem="23P-av-UTz" firstAttribute="trailing" secondItem="fVL-X5-aXY" secondAttribute="trailing" constant="20" id="9dd-Ar-RYO"/>
                             <constraint firstItem="6t3-cN-KTZ" firstAttribute="leading" secondItem="23P-av-UTz" secondAttribute="leading" constant="20" id="BAE-YJ-sft"/>
                             <constraint firstItem="23P-av-UTz" firstAttribute="trailing" secondItem="6t3-cN-KTZ" secondAttribute="trailing" constant="20" id="BzU-Xu-w4Q"/>
+                            <constraint firstItem="AUy-UO-9gm" firstAttribute="centerX" secondItem="9oO-Xq-jOX" secondAttribute="centerX" id="CXz-tu-QfU"/>
                             <constraint firstItem="sy3-KL-FzG" firstAttribute="top" secondItem="23P-av-UTz" secondAttribute="top" id="DrR-FM-Wo9"/>
                             <constraint firstItem="iHh-ZY-HkG" firstAttribute="leading" secondItem="23P-av-UTz" secondAttribute="leading" constant="26" id="EKl-wb-72h"/>
                             <constraint firstItem="fVL-X5-aXY" firstAttribute="top" secondItem="GZ1-yG-330" secondAttribute="bottom" constant="8" symbolic="YES" id="ElL-Mv-Elv"/>
                             <constraint firstItem="9oO-Xq-jOX" firstAttribute="leading" secondItem="23P-av-UTz" secondAttribute="leading" id="MiT-UH-h0u"/>
                             <constraint firstItem="9oO-Xq-jOX" firstAttribute="top" secondItem="6t3-cN-KTZ" secondAttribute="bottom" constant="28" id="PYp-KK-HBq"/>
+                            <constraint firstItem="AUy-UO-9gm" firstAttribute="centerY" secondItem="9oO-Xq-jOX" secondAttribute="centerY" id="Ta4-1M-T4F"/>
                             <constraint firstItem="GZ1-yG-330" firstAttribute="top" secondItem="qdF-JK-Led" secondAttribute="bottom" constant="8" symbolic="YES" id="U5S-DI-bW9"/>
                             <constraint firstItem="23P-av-UTz" firstAttribute="trailing" secondItem="GZ1-yG-330" secondAttribute="trailing" constant="20" id="VOU-Ef-iU8"/>
                             <constraint firstItem="qdF-JK-Led" firstAttribute="leading" secondItem="23P-av-UTz" secondAttribute="leading" constant="20" id="XHM-xT-o3V"/>
@@ -199,6 +205,7 @@
                         <outlet property="artistLabel" destination="6t3-cN-KTZ" id="93n-vJ-nYG"/>
                         <outlet property="favImage" destination="sy3-KL-FzG" id="Prt-Np-ohY"/>
                         <outlet property="imageLabel" destination="9oO-Xq-jOX" id="64x-bQ-kb5"/>
+                        <outlet property="loaderIndicator" destination="AUy-UO-9gm" id="3Y6-oA-t6f"/>
                         <outlet property="locationLabel" destination="ufE-L7-IVP" id="lNJ-lr-agd"/>
                         <outlet property="madeLabel" destination="GZ1-yG-330" id="cAf-2M-Vf9"/>
                         <outlet property="textLabel" destination="fVL-X5-aXY" id="HRI-sL-R6F"/>
@@ -287,6 +294,9 @@
         <image name="default" width="620" height="600"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>

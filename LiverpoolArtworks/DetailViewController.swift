@@ -53,6 +53,7 @@ class DetailViewController: UIViewController {
             //if image is empty put a default image
             imageLabel.image = UIImage(imageLiteralResourceName: "default")
         }
+        loaderIndicator.stopAnimating()
     }
     
     //api call to images url and get the image from the server
@@ -119,4 +120,5 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var madeLabel: UILabel!
     @IBOutlet weak var textLabel: UITextView!
+    @IBOutlet weak var loaderIndicator: UIActivityIndicatorView!
 }

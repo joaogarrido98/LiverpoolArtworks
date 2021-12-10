@@ -12,6 +12,7 @@
 		950657EF274F16CB0097350A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950657EE274F16CB0097350A /* DetailViewController.swift */; };
 		950657F1274F21850097350A /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950657F0274F21850097350A /* Defaults.swift */; };
 		954B877527614EE400748754 /* CoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954B877427614EE400748754 /* CoreManager.swift */; };
+		954B87772763988900748754 /* location.png in Resources */ = {isa = PBXBuildFile; fileRef = 954B87762763988900748754 /* location.png */; };
 		955536BB2751751000197094 /* UoL campus walk.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 955536BA2751751000197094 /* UoL campus walk.gpx */; };
 		958EFB5D275650D3009C85EE /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958EFB5C275650D3009C85EE /* ListViewController.swift */; };
 		D34A441D27513C6D000D7039 /* default.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D34A441C27513C6D000D7039 /* default.jpeg */; };
@@ -32,6 +33,7 @@
 		950657EE274F16CB0097350A /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		950657F0274F21850097350A /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		954B877427614EE400748754 /* CoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreManager.swift; sourceTree = "<group>"; };
+		954B87762763988900748754 /* location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = location.png; path = LiverpoolArtworks/Assets.xcassets/location.imageset/location.png; sourceTree = SOURCE_ROOT; };
 		955536BA2751751000197094 /* UoL campus walk.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "UoL campus walk.gpx"; sourceTree = "<group>"; };
 		958EFB5C275650D3009C85EE /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		D34A441C27513C6D000D7039 /* default.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default.jpeg; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 		D34A441927511ED7000D7039 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				954B87762763988900748754 /* location.png */,
 				955536BA2751751000197094 /* UoL campus walk.gpx */,
 				D34A441C27513C6D000D7039 /* default.jpeg */,
 			);
@@ -170,6 +173,7 @@
 				D3709824274E7C2C00354AE2 /* LaunchScreen.storyboard in Resources */,
 				D34A441D27513C6D000D7039 /* default.jpeg in Resources */,
 				D3709821274E7C2C00354AE2 /* Assets.xcassets in Resources */,
+				954B87772763988900748754 /* location.png in Resources */,
 				D370981C274E7C2A00354AE2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

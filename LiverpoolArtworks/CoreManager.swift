@@ -38,7 +38,9 @@ class CoreManager{
             if(results!.count > 0){
                 //add favourites to a class array so they can be used
                 for element in results!{
-                    favourites.append(element.title ?? "")
+                    if(element.title != nil){
+                        favourites.append(element.title!)
+                    }
                 }
             }
         }catch _ as NSError{
