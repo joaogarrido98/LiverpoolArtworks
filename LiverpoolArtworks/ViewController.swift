@@ -216,18 +216,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
             let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.0018, longitudeDelta: 0.0018))
             self.map.setRegion(region, animated: true)
-            orderByDistance(location: location)
         }
     }
     
     //function that orders the table depending on the distance
-    private func orderByDistance(location : CLLocation){
+    /*private func orderByDistance(location : CLLocation){
         var locations : [String] = []
         var distances : [Double] = []
+        //for each location get lat and long and create a coordinate
         for loc in allLocations {
             guard let lat = loc.value.lat else { return }
             guard let long = loc.value.lon else { return }
             let coordinate = CLLocation(latitude: lat , longitude: long)
+            //get the distance between user location and that location
             let distanceInMeters = location.distance(from: coordinate)
             if(distances.isEmpty){
                 distances.append(distanceInMeters)
@@ -237,19 +238,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     if(distanceInMeters < element){
                         locations[index] = loc.key
                         distances[index] = distanceInMeters
-                    }else{
-                        if(index == distances.count - 1){
-                            locations.append(loc.key)
-                            distances.append(distanceInMeters)
-                        }
-                       continue
+                        break
+                    }
+                    if(index == distances.count - 1){
+                        locations.append(loc.key)
+                        distances.append(distanceInMeters)
+                        break
                     }
                 }
             }
         }
         locationNames = locations
         table.reloadData()
-    }
+    }*/
     
     //gets annotation clicked title and performs segue to list controller
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -272,6 +273,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     private func setAnnotations(){
         //put an annotation for each location
         for location in allLocations {
+            //get title and coordinates for that location
             guard let name = location.value.name else {return}
             guard let lat = location.value.lat else {return}
             guard let lon = location.value.lon else {return}
@@ -284,11 +286,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     // MARK: - Segue
-    //prepare the segue with the data from core data
+    //prepare the segue with the data from data fetched or stored in core data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "toDetail"){
             let destination = segue.destination as! DetailViewController
-            //attribute the data to the variable in destination view
             destination.artwork = dataDictionary[selectedSection]?[selectedRow]
         }
         if(segue.identifier == "toList"){
@@ -307,6 +308,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBAction func unwind( _ seg: UIStoryboardSegue) {}
     
     // MARK: - Table setup
+    //on select get the artwork that matches and send trough the segue
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRow = indexPath.row
         selectedSection = locationNames[indexPath.section]
@@ -321,6 +323,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return locationNames[section]
     }
     
+    //create as many rows as there are arts in a specific location
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionName = locationNames[section]
         return dataDictionary[sectionName]?.count ?? 0
